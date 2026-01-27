@@ -10,7 +10,21 @@ class AdminService
 {
     public function getAll()
     {
-        return Admin::with('users')->get();
+        return Admin::with('users')
+            ->whereNull('deleted_at')
+
+            ->get();
+    }
+
+    public function getArchived()
+    {
+        return Admin::onlyTrashed()
+            ->with([
+                'users' => function ($q) {
+                    $q->withTrashed();
+                }
+            ])
+            ->get();
     }
 
     public function create(array $data)
@@ -58,4 +72,25 @@ class AdminService
 
         return $admin->delete();
     }
+
+
+    public function forceDelete(Admin $admin)
+    {
+        return $admin->forceDelete();
+    }
+
+
+
+    public function restore(Admin $admin)
+    {
+        $admin->restore();
+
+        if ($admin->users()->withTrashed()->exists()) {
+            $admin->users()->withTrashed()->restore();
+        }
+
+        return $admin->load('users');
+    }
+
+
 }

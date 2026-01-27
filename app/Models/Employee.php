@@ -18,6 +18,12 @@ class Employee extends Model
         'is_online',
         'current_location',
     ];
+
+    protected $casts = [
+        'is_online' => 'boolean',
+        'hourly_rate' => 'double',
+        'overtime_rate' => 'double',
+    ];
     // Employee.php
     public function attendances()
     {
@@ -39,7 +45,5 @@ class Employee extends Model
     {
         return $this->morphOne(User::class, 'userable');
     }
-
-
 
 }

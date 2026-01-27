@@ -23,6 +23,13 @@ class WorkshopController extends Controller
         );
     }
 
+    public function archived()
+    {
+        $workshop = $this->workshopService->getArchived();
+        return WorkshopResource::collection($workshop);
+    }
+
+
     public function store(CreateWorkshopRequest $request)
     {
         $workshop = $this->workshopService->create($request->validated());
@@ -43,6 +50,26 @@ class WorkshopController extends Controller
     public function destroy(Workshop $workshop)
     {
         $this->workshopService->delete($workshop);
-        return response()->json(['message' => 'Workshop deleted successfully']);
+        return response()->json([
+            'message' => 'Workshop archived successfully'
+        ]);
+
+    }
+
+
+    public function restore($id)
+    {
+        $workshop = Workshop::onlyTrashed()->findOrFail($id);
+        $this->workshopService->restore($workshop);
+
+        return response()->json(['message' => 'Workshop restored successfully']);
+    }
+
+    public function forceDelete($id)
+    {
+        $workshop = Workshop::onlyTrashed()->findOrFail($id);
+        $this->workshopService->forceDelete($workshop);
+
+        return response()->json(['message' => 'Workshop permanently deleted']);
     }
 }

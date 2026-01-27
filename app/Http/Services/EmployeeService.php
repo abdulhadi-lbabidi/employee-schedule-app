@@ -10,7 +10,19 @@ class EmployeeService
 {
     public function getAll()
     {
-        return Employee::with('users')->get();
+        return Employee::with('users')
+            ->whereNull('deleted_at')
+            ->get();
+    }
+    public function getArchived()
+    {
+        return Employee::onlyTrashed()
+            ->with([
+                'users' => function ($q) {
+                    $q->withTrashed();
+                }
+            ])
+            ->get();
     }
 
     public function create(array $data)
@@ -60,4 +72,21 @@ class EmployeeService
 
         return $employee->delete();
     }
+
+    public function forceDelete(Employee $employee)
+    {
+        return $employee->forceDelete();
+    }
+
+    public function restore(Employee $employee)
+    {
+        $employee->restore();
+
+        if ($employee->users()->withTrashed()->exists()) {
+            $employee->users()->withTrashed()->restore();
+        }
+
+        return $employee->load('users');
+    }
+
 }

@@ -9,8 +9,16 @@ class WorkshopService
 {
     public function getAll()
     {
-        return Workshop::all();
+        return Workshop::whereNull('deleted_at')
+            ->get();
     }
+
+    public function getArchived()
+    {
+        return Workshop::onlyTrashed()
+            ->get();
+    }
+
 
     public function create(array $data)
     {
@@ -26,5 +34,15 @@ class WorkshopService
     public function delete(Workshop $workshop)
     {
         return $workshop->delete();
+    }
+
+    public function forceDelete(Workshop $workshop)
+    {
+        return $workshop->forceDelete();
+    }
+
+    public function restore(Workshop $workshop)
+    {
+        return $workshop->restore();
     }
 }

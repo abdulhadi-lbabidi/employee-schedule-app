@@ -20,6 +20,12 @@ class EmployeeController extends Controller
         $employees = $this->employeeService->getAll();
         return EmployeeResource::collection($employees);
     }
+
+    public function archived()
+    {
+        $employee = $this->employeeService->getArchived();
+        return EmployeeResource::collection($employee);
+    }
     public function store(CreateEmployeeRequest $request)
     {
         $employee = $this->employeeService->create($request->validated());
@@ -41,7 +47,28 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         $this->employeeService->delete($employee);
-        return response()->json('deleted');
+        return response()->json([
+            'message' => 'Admin archived successfully'
+        ]);
+
+    }
+
+
+
+    public function restore($id)
+    {
+        $employee = Employee::onlyTrashed()->findOrFail($id);
+        $this->employeeService->restore($employee);
+
+        return response()->json(['message' => 'Employee restored successfully']);
+    }
+
+    public function forceDelete($id)
+    {
+        $employee = Employee::onlyTrashed()->findOrFail($id);
+        $this->employeeService->forceDelete($employee);
+
+        return response()->json(['message' => 'Employee permanently deleted']);
     }
 
 }
