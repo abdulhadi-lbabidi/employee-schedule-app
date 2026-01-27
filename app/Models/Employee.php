@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Employee extends Model
+{
+    /** @use HasFactory<\Database\Factories\EmployeeFactory> */
+    use HasFactory;
+
+    protected $fillable = [
+        'position',
+        'department',
+        'hourly_rate',
+        'overtime_rate',
+        'is_online',
+        'current_location',
+    ];
+    // Employee.php
+    public function attendances() {
+        return $this->hasMany(Attendance::class);
+    }
+    public function loans() {
+        return $this->hasMany(Loan::class);
+    }
+    public function rewards() {
+        return $this->hasMany(Reward::class);
+    }
+    public function weeklyHistories() {
+        return $this->hasMany(WeeklyHistory::class);
+    }
+    public function users()
+    {
+        return $this->morphOne(User::class, 'userable');
+    }
+}
