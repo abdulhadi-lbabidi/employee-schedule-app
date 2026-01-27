@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,13 +12,13 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('position');
             $table->string('department');
             $table->double('hourly_rate');
             $table->double('overtime_rate');
-            $table->boolean('is_online');
+            $table->boolean('is_online')->default(false);
             $table->string('current_location');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

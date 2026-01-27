@@ -9,9 +9,14 @@ class WeeklyHistory extends Model
 {
     /** @use HasFactory<\Database\Factories\WeeklyHistoryFactory> */
     use HasFactory;
-   protected $fillable = [
-        'employee_id', 'week_number', 'month', 'year',
-        'workshops', 'amount_paid', 'is_paid'
+    protected $fillable = [
+        'employee_id',
+        'week_number',
+        'month',
+        'year',
+        'workshops',
+        'amount_paid',
+        'is_paid'
     ];
 
     protected $casts = [
@@ -20,10 +25,12 @@ class WeeklyHistory extends Model
         'amount_paid' => 'decimal:2',
     ];
 
-    public function employee() {
+    public function employee()
+    {
         return $this->belongsTo(Employee::class);
     }
-    public function workshop() {
+    public function workshop()
+    {
         return $this->belongsTo(Workshop::class);
     }
 }

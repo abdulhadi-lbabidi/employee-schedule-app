@@ -10,7 +10,7 @@ class Attendance extends Model
     /** @use HasFactory<\Database\Factories\AttendanceFactory> */
     use HasFactory;
 
-        protected $fillable = [
+    protected $fillable = [
         'employee_id',
         'workshop_id',
         'date',
@@ -23,13 +23,12 @@ class Attendance extends Model
     ];
 
 
-
     public function workshop()
     {
         return $this->belongsTo(Workshop::class);
     }
 
-        public function employee()
+    public function employee()
     {
         return $this->belongsTo(Employee::class);
     }

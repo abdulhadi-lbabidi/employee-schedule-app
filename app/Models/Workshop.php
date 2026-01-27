@@ -23,8 +23,8 @@ class Workshop extends Model
     {
         return $this->hasMany(Attendance::class);
     }
-// Workshop.php
-public function employees() {
-    return $this->hasMany(Employee::class);
-}
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }

@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
 {
     /** @use HasFactory<\Database\Factories\EmployeeFactory> */
-    use HasFactory;
-
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'position',
         'department',
@@ -19,20 +19,27 @@ class Employee extends Model
         'current_location',
     ];
     // Employee.php
-    public function attendances() {
+    public function attendances()
+    {
         return $this->hasMany(Attendance::class);
     }
-    public function loans() {
+    public function loans()
+    {
         return $this->hasMany(Loan::class);
     }
-    public function rewards() {
+    public function rewards()
+    {
         return $this->hasMany(Reward::class);
     }
-    public function weeklyHistories() {
+    public function weeklyHistories()
+    {
         return $this->hasMany(WeeklyHistory::class);
     }
     public function users()
     {
         return $this->morphOne(User::class, 'userable');
     }
+
+
+
 }

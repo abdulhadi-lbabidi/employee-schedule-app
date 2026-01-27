@@ -10,8 +10,8 @@ class Payment extends Model
     /** @use HasFactory<\Database\Factories\PaymentFactory> */
     use HasFactory;
 
-        protected $fillable = [
-        'user_id',
+    protected $fillable = [
+        'employee_id',
         'week_number',
         'total_amount',
         'amount_paid',
@@ -19,9 +19,9 @@ class Payment extends Model
         'payment_date',
     ];
 
-    public function user()
+    public function employee()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Employee::class);
     }
 
 

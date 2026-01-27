@@ -9,7 +9,8 @@ class Reward extends Model
 {
     /** @use HasFactory<\Database\Factories\RewardFactory> */
     use HasFactory;
-    public function employee() {
-    return $this->belongsTo(Employee::class);
-}
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }
