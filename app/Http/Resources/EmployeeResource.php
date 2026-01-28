@@ -16,12 +16,7 @@ class EmployeeResource extends JsonResource
             'overtime_rate' => $this->overtime_rate,
             'is_online' => $this->is_online,
             'current_location' => $this->current_location,
-            'user' => [
-                'id' => $this->users->id ?? null,
-                'full_name' => $this->users->full_name ?? null,
-                'phone_number' => $this->users->phone_number ?? null,
-                'email' => $this->users->email ?? null,
-            ],
+            'user' => new UserResource($this->users),
             'workshops' => $this->workshops->map(function ($workshop) {
                 return [
                     'id' => $workshop->id,

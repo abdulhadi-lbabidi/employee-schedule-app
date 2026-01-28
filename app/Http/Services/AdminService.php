@@ -10,7 +10,7 @@ class AdminService
 {
     public function getAll()
     {
-        return Admin::with('users')
+        return Admin::with('user')
             ->whereNull('deleted_at')
 
             ->get();
@@ -39,7 +39,7 @@ class AdminService
             'email' => $data['email'] ?? null,
             'password' => Hash::make($data['password']),
             'userable_id' => $admin->id,
-            'userable_type' => Admin::class,
+            'userable_type' => 'Admin',
         ]);
 
 

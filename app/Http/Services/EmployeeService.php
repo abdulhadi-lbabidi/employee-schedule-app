@@ -10,7 +10,7 @@ class EmployeeService
 {
     public function getAll()
     {
-        return Employee::with(['users', 'workshops'])
+        return Employee::with(['user', 'workshops'])
             ->whereNull('deleted_at')
             ->get();
     }
@@ -42,7 +42,7 @@ class EmployeeService
             'email' => $data['email'] ?? null,
             'password' => Hash::make($data['password']),
             'userable_id' => $employee->id,
-            'userable_type' => Employee::class,
+            'userable_type' => 'Employee',
         ]);
 
         return $employee->load('users');
