@@ -17,8 +17,6 @@ class AdminResource extends JsonResource
                 'phone_number' => $this->users->phone_number ?? null,
                 'email' => $this->users->email ?? null,
             ],
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
     }
 }
