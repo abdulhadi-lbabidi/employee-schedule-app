@@ -26,15 +26,25 @@ class AuthController extends Controller
         return response()->json([
             "token" => $result['token'],
             "user" => $result['user'],
-            'status' => 200
+            'status' => 200,
+            'role' => $result['role']
         ]);
     }
     public function me()
     {
-        $user = Auth::user()->load('userable');
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->load('userable');
+
+        $role = ($user->userable_type === 'Admin') ? 'admin' : 'employee';
 
         return response()->json([
             'user' => $user,
+            'role' => $role,
             'status' => 200
         ], 200);
     }

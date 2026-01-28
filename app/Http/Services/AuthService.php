@@ -18,11 +18,14 @@ class AuthService
 
         $user->tokens()->delete();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $role = ($user->userable_type === 'Admin') ? 'admin' : 'employee';
+
+        $token = $user->createToken('auth_token', [$role])->plainTextToken;
 
         return [
             'token' => $token,
-            'user' => $user
+            'user' => $user,
+            'role' => $role
         ];
     }
 
