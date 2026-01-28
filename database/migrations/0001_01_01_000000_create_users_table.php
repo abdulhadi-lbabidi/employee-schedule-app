@@ -20,6 +20,9 @@ return new class extends Migration {
             $table->string('password');
             $table->string('is_archived')->default(0);
             $table->morphs('userable');
+
+            $table->string('fcm_token')->nullable();
+
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

@@ -4,14 +4,14 @@ namespace App\Http\Requests\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateLoanRequest extends FormRequest
+class UpdatePaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +22,11 @@ class CreateLoanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_id'=>'required|exists:employees,id',
-            'admin_id'=>'required|exists:admins,id',
-            'amount'=>'required|numeric',
-            'paid_amount'=>'required|numeric',
-            'role'=>'required|in:قيد الانتظار , مدفوعة جزئياً, مسددة بالكامل',
-            'date'=>'required|date',
+            'employee_id' => 'sometimes|exists:employees,id',
+            'admin_id' => 'sometimes|exists:admins,id',
+            'week_number' => 'sometimes|integer|min:1|max:53',
+            'total_amount' => 'sometimes|numeric|min:0',
+            'amount_paid' => 'sometimes|numeric|min:0',
         ];
     }
 }

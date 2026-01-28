@@ -43,7 +43,7 @@ class AdminService
         ]);
 
 
-        return $admin->load('users');
+        return $admin->load('user');
     }
 
     public function update(Admin $admin, array $data)
