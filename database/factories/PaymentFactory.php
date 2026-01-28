@@ -2,7 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Admin;
+use App\Models\Employee;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,12 +21,13 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'=>User::all()->random->id,
+            'employee_id'=>Employee::all()->random()->id,
+            'admin_id'=>Admin::all()->random()->id,
             'week_number'=>fake()->numberBetween(1,5),
             'total_amount'=>fake()->randomFloat(2,0.5,1),
             'amount_paid'=>fake()->randomFloat(2,0.5,1),
             'is_paid'=>fake()->boolean(20),
-            'payment_date',
+            'payment_date'=>Carbon::createFromDate(2026,1),
         ];
     }
 }

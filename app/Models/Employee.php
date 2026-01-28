@@ -63,4 +63,11 @@ class Employee extends Model
     {
         return $this->hasMany(WeeklyHistory::class);
     }
+<<<<<<< HEAD
+=======
+    public function user()
+    {
+        return $this->morphOne(User::class, 'userable');
+    }
+>>>>>>> d13edbc383e1eb2462a6a7a58dca58e44f703c64
 }

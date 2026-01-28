@@ -9,6 +9,14 @@ class Reward extends Model
 {
     /** @use HasFactory<\Database\Factories\RewardFactory> */
     use HasFactory;
+
+    protected $fillable = [
+            'employee_id',
+            'admin_id',
+            'amount',
+            'reason',
+            'date_issued'
+    ];
     public function employee()
     {
         return $this->belongsTo(Employee::class);

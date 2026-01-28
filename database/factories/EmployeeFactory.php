@@ -19,7 +19,7 @@ class EmployeeFactory extends Factory
     {
         return [
             'position'=>fake()->randomElement(['employee']),
-            'department'=>fake()->randomElement(['workshop employee']),
+            'department'=>fake()->randomElement(['IT', 'HR', 'Sales']),
             'hourly_rate'=>fake()->randomFloat(2,0.5,1),
             'overtime_rate'=>fake()->randomFloat(2,1,1.5),
             'is_online'=>fake()->boolean(20),
