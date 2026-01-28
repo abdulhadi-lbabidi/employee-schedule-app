@@ -10,7 +10,7 @@ class EmployeeService
 {
     public function getAll()
     {
-        return Employee::with('users')
+        return Employee::with(['users', 'workshops'])
             ->whereNull('deleted_at')
             ->get();
     }

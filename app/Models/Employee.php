@@ -24,7 +24,12 @@ class Employee extends Model
         'hourly_rate' => 'double',
         'overtime_rate' => 'double',
     ];
-    // Employee.php
+
+    public function users()
+    {
+        return $this->morphOne(User::class, 'userable');
+    }
+
     public function workshops()
     {
         return $this->belongsToMany(Workshop::class, 'attendances')
@@ -57,9 +62,5 @@ class Employee extends Model
     public function weeklyHistories()
     {
         return $this->hasMany(WeeklyHistory::class);
-    }
-    public function users()
-    {
-        return $this->morphOne(User::class, 'userable');
     }
 }
