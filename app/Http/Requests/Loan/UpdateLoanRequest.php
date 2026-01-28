@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Loan;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateLoansRequest extends FormRequest
+class UpdateLoanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,11 @@ class UpdateLoansRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'employee_id'=>'required|exists:employees,id',
+            'amount'=>'required|numeric',
+            'paid_amount'=>'required|numeric',
+            'role'=>'required|in:قيد الانتظار , مدفوعة جزئياً, مسددة بالكامل',
+            'date'=>'required|date',
         ];
     }
 }
