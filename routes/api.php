@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LoanController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkshopController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,8 @@ Route::apiResource('admins', AdminController::class);
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
 
     Route::get('me', [AuthController::class, 'me']);
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
@@ -59,6 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('loans/{id}/restore', [LoanController::class, 'restore']);
         Route::delete('loans/{id}/force-delete', [LoanController::class, 'forceDelete']);
         Route::delete('loans/{loan}', [LoanController::class, 'destroy']);
+
+        Route::post('notifications/send', [NotificationController::class, 'send']);
 
     });
 
