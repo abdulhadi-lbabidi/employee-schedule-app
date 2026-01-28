@@ -22,6 +22,13 @@ class EmployeeResource extends JsonResource
                 'phone_number' => $this->users->phone_number ?? null,
                 'email' => $this->users->email ?? null,
             ],
+            'workshops' => $this->workshops->map(function ($workshop) {
+                return [
+                    'id' => $workshop->id,
+                    'name' => $workshop->name,
+                    'location' => $workshop->location,
+                ];
+            }),
         ];
     }
 }
