@@ -11,7 +11,7 @@ class CreateLoanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +22,12 @@ class CreateLoanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_id'=>'required|exists:employees,id',
-            'admin_id'=>'required|exists:admins,id',
-            'amount'=>'required|numeric',
-            'paid_amount'=>'required|numeric',
-            'role'=>'required|in:قيد الانتظار , مدفوعة جزئياً, مسددة بالكامل',
-            'date'=>'required|date',
+            'employee_id' => 'required|exists:employees,id',
+            'admin_id' => 'required|exists:admins,id',
+            'amount' => 'required|numeric',
+            'paid_amount' => 'required|numeric',
+            'role' => 'required',
+            'date' => 'required',
         ];
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
-        public function __construct(
+    public function __construct(
         private LoanService $loanService
     ) {
     }
@@ -49,12 +49,9 @@ class LoanController extends Controller
     {
         $this->loanService->delete($loan);
         return response()->json([
-            'message' => 'تمت أرشفة السلفة بنجاح'
+            'message' => 'Loans archived successfully'
         ]);
-
     }
-
-
 
     public function restore($id)
     {
