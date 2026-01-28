@@ -24,7 +24,7 @@ class EmployeeSeeder extends Seeder
             'full_name' => 'Ahmad Aini',
             'phone_number'=>'0993227885',
             'profile_image_url'=>null,
-            'email'=>null,
+            'email'=>'ahmadaini@nouh-agency.com',
             'password'=>bcrypt('123.321A'),
         ]);
         Employee::factory()->create([
