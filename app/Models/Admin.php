@@ -15,7 +15,7 @@ class Admin extends Model
     protected $fillable = [
         'name',
     ];
-    public function users()
+    public function user()
     {
         return $this->morphOne(User::class, 'userable');
     }

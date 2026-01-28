@@ -10,12 +10,11 @@ class Loan extends Model
     /** @use HasFactory<\Database\Factories\LoanFactory> */
     use HasFactory;
         protected $fillable = [
-        'position',
-        'department',
-        'hourly_rate',
-        'overtime_rate',
-        'is_online',
-        'current_location',
+        'employee_id',
+        'amount',
+        'paid_amount',
+        'role',
+        'date',
     ];
 
     public function employee() {

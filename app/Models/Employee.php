@@ -41,7 +41,7 @@ class Employee extends Model
     {
         return $this->hasMany(WeeklyHistory::class);
     }
-    public function users()
+    public function user()
     {
         return $this->morphOne(User::class, 'userable');
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Employee;
 use App\Models\User;
 use App\Models\Workshop;
 use Carbon\Carbon;
@@ -21,7 +22,7 @@ class AttendanceFactory extends Factory
     public function definition(): array
     {
         return [
-        'user_id'=>User::all()->random()->id,
+        'employee_id'=>Employee::all()->random()->id,
         'workshop_id'=>Workshop::all()->random()->id,
         'date'=>Carbon::today(),
         'check_in'=>Carbon::createFromDate(2026,1),
