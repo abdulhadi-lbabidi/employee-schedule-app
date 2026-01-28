@@ -21,11 +21,11 @@ class CheckRoleMiddleware
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if ($role === 'admin' && $user->userable_type !== \App\Models\Admin::class) {
+        if ($role === 'admin' && $user->userable_type !== 'Admin') {
             return response()->json(['message' => 'this permission for admins only'], 403);
         }
 
-        if ($role === 'employee' && $user->userable_type !== \App\Models\Employee::class) {
+        if ($role === 'employee' && $user->userable_type !== 'Employee') {
             return response()->json(['message' => 'this permission for employees only'], 403);
         }
 

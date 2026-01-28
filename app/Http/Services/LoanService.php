@@ -3,14 +3,21 @@
 
 namespace App\Http\Services;
 
-use App\Models\Loan ;
+use App\Models\Loan;
 
 class LoanService
 {
     public function getAll()
     {
-        return Loan::whereNull('deleted_at')
-            ->get();
+        $user = auth()->user();
+
+        if ($user->userable_type === 'Employee') {
+            return Loan::where('employee_id', $user->userable_id)
+                ->with(['employee.user'])
+                ->get();
+        }
+
+        return Loan::with(['employee.user'])->whereNull('deleted_at')->get();
     }
 
     public function getArchived()

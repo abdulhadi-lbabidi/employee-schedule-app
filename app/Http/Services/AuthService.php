@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class AuthService
 {
@@ -17,19 +18,35 @@ class AuthService
 
         $user->tokens()->delete();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $role = ($user->userable_type === 'Admin') ? 'admin' : 'employee';
+
+        $token = $user->createToken('auth_token', [$role])->plainTextToken;
 
         return [
             'token' => $token,
-            'user' => $user
+            'user' => $user,
+            'role' => $role
         ];
     }
+
 
     public function updateProfile(User $user, array $data): User
     {
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
+
+        if (isset($data['profile_image_url'])) {
+            if ($user->profile_image_url) {
+                $oldPath = str_replace(url('storage/'), '', $user->profile_image_url);
+                Storage::disk('public')->delete($oldPath);
+            }
+
+            $path = $data['profile_image_url']->store('profiles', 'public');
+
+            $data['profile_image_url'] = url('storage/' . $path);
+        }
+
         $user->update($data);
         return $user;
     }

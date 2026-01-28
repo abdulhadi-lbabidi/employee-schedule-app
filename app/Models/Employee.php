@@ -25,11 +25,6 @@ class Employee extends Model
         'overtime_rate' => 'double',
     ];
 
-    public function users()
-    {
-        return $this->morphOne(User::class, 'userable');
-    }
-
     public function workshops()
     {
         return $this->belongsToMany(Workshop::class, 'attendances')

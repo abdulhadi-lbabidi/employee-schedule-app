@@ -26,6 +26,7 @@ class UpdateProfileRequest extends FormRequest
             'phone_number' => ['sometimes', 'string'],
             'email' => ['sometimes', 'email', 'unique:users,email,' . auth()->id()],
             'password' => ['sometimes', 'confirmed', 'min:6'],
+            'profile_image_url' => ['sometimes', 'image', 'mimes:jpg,jpeg,png', 'max:10240'],
         ];
     }
 }

@@ -10,7 +10,7 @@ class EmployeeService
 {
     public function getAll()
     {
-        return Employee::with(['users', 'workshops'])
+        return Employee::with(['user', 'workshops'])
             ->whereNull('deleted_at')
             ->get();
     }
@@ -18,7 +18,7 @@ class EmployeeService
     {
         return Employee::onlyTrashed()
             ->with([
-                'users' => function ($q) {
+                'user' => function ($q) {
                     $q->withTrashed();
                 }
             ])
@@ -42,18 +42,18 @@ class EmployeeService
             'email' => $data['email'] ?? null,
             'password' => Hash::make($data['password']),
             'userable_id' => $employee->id,
-            'userable_type' => Employee::class,
+            'userable_type' => 'Employee',
         ]);
 
-        return $employee->load('users');
+        return $employee->load('user');
     }
 
     public function update(Employee $employee, array $data)
     {
         $employee->update($data);
 
-        if ($employee->users) {
-            $employee->users->update([
+        if ($employee->user) {
+            $employee->user->update([
                 'full_name' => $data['full_name'] ?? $employee->users->full_name,
                 'phone_number' => $data['phone_number'] ?? $employee->users->phone_number,
                 'email' => $data['email'] ?? $employee->users->email,
@@ -66,8 +66,8 @@ class EmployeeService
 
     public function delete(Employee $employee)
     {
-        if ($employee->users) {
-            $employee->users->delete();
+        if ($employee->user) {
+            $employee->user->delete();
         }
 
         return $employee->delete();
@@ -82,8 +82,8 @@ class EmployeeService
     {
         $employee->restore();
 
-        if ($employee->users()->withTrashed()->exists()) {
-            $employee->users()->withTrashed()->restore();
+        if ($employee->user()->withTrashed()->exists()) {
+            $employee->user()->withTrashed()->restore();
         }
 
         return $employee->load('users');
