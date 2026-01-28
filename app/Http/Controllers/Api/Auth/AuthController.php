@@ -25,7 +25,8 @@ class AuthController extends Controller
 
         return response()->json([
             "token" => $result['token'],
-            "user" => $result['user']
+            "user" => $result['user'],
+            'status' => 200
         ]);
     }
     public function me()
@@ -34,6 +35,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => $user,
+            'status' => 200
         ], 200);
     }
 
@@ -46,6 +48,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Profile updated successfully',
             'user' => $user,
+            'status' => 200
         ]);
     }
 }

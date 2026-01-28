@@ -39,7 +39,7 @@ class AuthService
                 Storage::disk('public')->delete($oldPath);
             }
 
-            $path = $data['profile_image']->store('profiles', 'public');
+            $path = $data['profile_image_url']->store('profiles', 'public');
 
             $data['profile_image_url'] = url('storage/' . $path);
         }

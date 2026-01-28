@@ -20,7 +20,7 @@ class AdminService
     {
         return Admin::onlyTrashed()
             ->with([
-                'users' => function ($q) {
+                'user' => function ($q) {
                     $q->withTrashed();
                 }
             ])
@@ -66,8 +66,8 @@ class AdminService
 
     public function delete(Admin $admin)
     {
-        if ($admin->users) {
-            $admin->users->delete();
+        if ($admin->user) {
+            $admin->user->delete();
         }
 
         return $admin->delete();
@@ -85,8 +85,8 @@ class AdminService
     {
         $admin->restore();
 
-        if ($admin->users()->withTrashed()->exists()) {
-            $admin->users()->withTrashed()->restore();
+        if ($admin->user()->withTrashed()->exists()) {
+            $admin->user()->withTrashed()->restore();
         }
 
         return $admin->load('users');
