@@ -23,6 +23,7 @@ class CreateLoanRequest extends FormRequest
     {
         return [
             'employee_id'=>'required|exists:employees,id',
+            'admin_id'=>'required|exists:admins,id',
             'amount'=>'required|numeric',
             'paid_amount'=>'required|numeric',
             'role'=>'required|in:قيد الانتظار , مدفوعة جزئياً, مسددة بالكامل',

@@ -11,6 +11,7 @@ class Loan extends Model
     use HasFactory;
         protected $fillable = [
         'employee_id',
+        'admin_id',
         'amount',
         'paid_amount',
         'role',
@@ -19,5 +20,8 @@ class Loan extends Model
 
     public function employee() {
     return $this->belongsTo(Employee::class);
+}
+    public function admin() {
+    return $this->belongsTo(Admin::class);
 }
 }

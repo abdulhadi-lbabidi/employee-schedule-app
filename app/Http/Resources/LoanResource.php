@@ -23,8 +23,14 @@ class LoanResource extends JsonResource
             'employee' => [
                 'id' => $this->employee->id ?? null,
                 'full_name' => $this->employee->user->full_name ?? null,
-                'phone_number' => $this->employee->userphone_number ?? null,
-                'email' => $this->users->email ?? null,
+                'phone_number' => $this->employee->user->phone_number ?? null,
+                'email' => $this->user->email ?? null,
+            ],
+            'admin' => [
+                'id' => $this->admin->id ?? null,
+                'full_name' => $this->admin->user->full_name ?? null,
+                'phone_number' => $this->admin->user->phone_number ?? null,
+                'email' => $this->user->email ?? null,
             ],
         ];
     }

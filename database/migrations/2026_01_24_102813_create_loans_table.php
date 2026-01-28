@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Admin;
 use App\Models\Employee;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Employee::class)->constrained();
+            $table->foreignIdFor(Employee::class);
+            $table->foreignIdFor(Admin::class);
             $table->integer('amount');
             $table->integer('paid_amount');
             $table->enum('role', ['قيد الانتظار ', 'مدفوعة جزئياً', 'مسددة بالكامل'])->default('قيد الانتظار ')  ;

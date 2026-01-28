@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 
 Route::get('/fresh', function () {
-    Artisan::call('migrate:fresh');
+    Artisan::call('migrate:fresh --seed');
 
     return response()->json('Database refreshed successfully');
 });
