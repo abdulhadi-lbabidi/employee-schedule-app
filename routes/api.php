@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\WorkshopController;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,8 @@ Route::apiResource('workshops', WorkshopController::class);
 Route::get('workshops-archived', [WorkshopController::class, 'archived']);
 Route::post('workshops/{id}/restore', [WorkshopController::class, 'restore']);
 Route::delete('workshops/{id}/force-delete', [WorkshopController::class, 'forceDelete']);
+
+//Attendance Routes
+Route::get('attendances', [AttendanceController::class, 'index']);
+Route::post('attendances/check-in', [AttendanceController::class, 'checkIn']);
+Route::post('attendances/check-out/{employee}', [AttendanceController::class, 'checkOut']);

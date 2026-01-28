@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -19,12 +18,13 @@ return new class extends Migration
             $table->foreignIdFor(Workshop::class)->constrained();
             $table->date('date');
             $table->timestamp('check_in');
-            $table->timestamp('check_out');
+            $table->timestamp('check_out')->nullable();
             $table->integer('week_number');
             $table->text('note')->nullable();
-            $table->double('regular_hours');
-            $table->double('overtime_hours');
-            $table->enum('status',['مؤرشف','قيد الرفع']);
+            $table->double('regular_hours')->default(0);
+            $table->double('overtime_hours')->default(0);
+
+            $table->enum('status', ['مؤرشف', 'قيد الرفع']);
             $table->timestamps();
         });
     }

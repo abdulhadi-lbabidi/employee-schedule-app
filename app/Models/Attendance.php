@@ -22,6 +22,12 @@ class Attendance extends Model
         'overtime_hours',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+        'check_in' => 'datetime',
+        'check_out' => 'datetime',
+    ];
+
 
     public function workshop()
     {
@@ -32,7 +38,4 @@ class Attendance extends Model
     {
         return $this->belongsTo(Employee::class);
     }
-
-
-
 }

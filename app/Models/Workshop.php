@@ -20,12 +20,25 @@ class Workshop extends Model
         'radiusInMeters',
     ];
 
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'attendances')
+            ->withPivot([
+                'date',
+                'check_in',
+                'check_out',
+                'week_number',
+                'note',
+                'regular_hours',
+                'overtime_hours',
+                'status'
+            ])
+            ->withTimestamps();
+    }
+
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }
-    public function employees()
-    {
-        return $this->hasMany(Employee::class);
-    }
+
 }
