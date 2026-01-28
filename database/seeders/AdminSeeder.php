@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             'full_name' => 'Abdulrahman Nouh',
             'phone_number'=>'0946963546',
             'profile_image_url'=>null,
-            'email'=>null,
+            'email'=>'abdulrahmannouh@nouh-agency.com',
             'password'=>bcrypt('123.321A'),
         ]);
         Admin::factory()->create([
@@ -28,7 +28,7 @@ class AdminSeeder extends Seeder
             'full_name' => 'Ahmed Shahrour',
             'phone_number'=>'0932893379',
             'profile_image_url'=>null,
-            'email'=>null,
+            'email'=>'ahmadshahrour@nouh-agency.com',
             'password'=>bcrypt('123.321A'),
         ]);
         Admin::factory()->create([
