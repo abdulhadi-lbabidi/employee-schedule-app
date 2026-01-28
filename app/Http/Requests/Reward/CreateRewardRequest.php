@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Payment;
+namespace App\Http\Requests\Reward;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateLoanRequest extends FormRequest
+class CreateRewardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateLoanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'employee_id' => 'required|exists:employees,id',
+            'admin_id' => 'required|exists:admins,id',
+            'amount' => 'required|integer|min:1',
+            'reason' => 'required|string|max:255',
+            'date_issued' => 'required|date',
         ];
     }
 }

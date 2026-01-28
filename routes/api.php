@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LoanController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkshopController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +65,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('loans/{id}/restore', [LoanController::class, 'restore']);
         Route::delete('loans/{id}/force-delete', [LoanController::class, 'forceDelete']);
         Route::delete('loans/{loan}', [LoanController::class, 'destroy']);
+
+        Route::apiResource('payments', PaymentController::class);
+
+        Route::get('payments-archived', [PaymentController::class, 'archived']);
+        Route::post('payments/{id}/restore', [PaymentController::class, 'restore']);
+        Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete']);
+
+        Route::apiResource('rewards', RewardController::class);
+        Route::get('rewards-archived', [RewardController::class, 'archived']);
+        Route::post('rewards/{id}/restore', [RewardController::class, 'restore']);
+        Route::delete('rewards/{id}/force-delete', [RewardController::class, 'forceDelete']);
 
         Route::post('notifications/send', [NotificationController::class, 'send']);
 
