@@ -16,9 +16,9 @@ class EmployeeSeeder extends Seeder
         Employee::factory()->create([
             'position'=>'daily worker',
             'department'=>'Executer & Watcher',
-            'hourly_rate'=>'10',
-            'overtime_rate'=>'1',
-            'is_online'=>false,
+            'hourly_rate'=>10,
+            'overtime_rate'=>1,
+            'is_online'=>0,
             'current_location'=>'Office',
         ])->user()->create([
             'full_name' => 'Ahmad Aini',
@@ -30,13 +30,13 @@ class EmployeeSeeder extends Seeder
         Employee::factory()->create([
             'position'=>'daily worker',
             'department'=>'Executer & Watcher',
-            'hourly_rate'=>'7',
-            'overtime_rate'=>'1',
-            'is_online'=>false,
+            'hourly_rate'=>7,
+            'overtime_rate'=>1,
+            'is_online'=>0,
             'current_location'=>'W115',
         ])->user()->create([
             'full_name' => 'Ahmad Mousa',
-            'phone_number'=>'0993227885',
+            'phone_number'=>'0954282944',
             'profile_image_url'=>null,
             'email'=>null,
             'password'=>bcrypt('123.321A'),
@@ -44,27 +44,27 @@ class EmployeeSeeder extends Seeder
         Employee::factory()->create([
             'position'=>'daily worker',
             'department'=>'Executer & Watcher',
-            'hourly_rate'=>'7',
-            'overtime_rate'=>'1',
+            'hourly_rate'=>7,
+            'overtime_rate'=>1,
             'is_online'=>false,
             'current_location'=>'W118',
         ])->user()->create([
             'full_name' => 'Abdulkarim Ibrahim',
-            'phone_number'=>'0993227885',
+            'phone_number'=>'0981287087',
             'profile_image_url'=>null,
             'email'=>null,
             'password'=>bcrypt('123.321A'),
         ]);
         Employee::factory()->create([
             'position'=>'daily worker',
-            'department'=>'',
-            'hourly_rate'=>'7',
-            'overtime_rate'=>'1',
+            'department'=>'Executer & Watcher',
+            'hourly_rate'=>7,
+            'overtime_rate'=>1,
             'is_online'=>false,
             'current_location'=>'W115',
         ])->user()->create([
             'full_name' => 'Mahmoud Ibrahim',
-            'phone_number'=>'0993227885',
+            'phone_number'=>'0939405822',
             'profile_image_url'=>null,
             'email'=>null,
             'password'=>bcrypt('123.321A'),
@@ -72,13 +72,13 @@ class EmployeeSeeder extends Seeder
         Employee::factory()->create([
             'position'=>'daily worker',
             'department'=>'Executer & Watcher',
-            'hourly_rate'=>'7',
-            'overtime_rate'=>'1',
+            'hourly_rate'=>7,
+            'overtime_rate'=>1,
             'is_online'=>false,
             'current_location'=>'W112',
         ])->user()->create([
             'full_name' => 'Anas Karman',
-            'phone_number'=>'2968004871',
+            'phone_number'=>'0968004871',
             'profile_image_url'=>null,
             'email'=>null,
             'password'=>bcrypt('123.321A'),
@@ -86,8 +86,8 @@ class EmployeeSeeder extends Seeder
         Employee::factory()->create([
             'position'=>'daily worker',
             'department'=>'Executer & Watcher',
-            'hourly_rate'=>'10',
-            'overtime_rate'=>'1',
+            'hourly_rate'=>10,
+            'overtime_rate'=>1,
             'is_online'=>false,
             'current_location'=>'W120',
         ])->user()->create([

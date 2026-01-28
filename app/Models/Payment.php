@@ -12,6 +12,7 @@ class Payment extends Model
 
     protected $fillable = [
         'employee_id',
+        'admin_id',
         'week_number',
         'total_amount',
         'amount_paid',
@@ -22,6 +23,10 @@ class Payment extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class);
+    }
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 
 

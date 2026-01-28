@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Admin;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -15,7 +16,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Employee::class)->constrained();
+            $table->foreignIdFor(Employee::class);
+            $table->foreignIdFor(Admin::class);
             $table->integer('week_number');
             $table->integer('total_amount');
             $table->integer('amount_paid');

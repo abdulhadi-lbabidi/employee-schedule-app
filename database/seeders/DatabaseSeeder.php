@@ -18,7 +18,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,]);
         $this->call([
+            WorkshopSeeder::class,]);
+        $this->call([
             EmployeeSeeder::class,]);
+        $this->call([
+            AttendanceSeeder::class,]);
+        $this->call([
+            LoanSeeder::class,]);
+        $this->call([
+            RewardSeeder::class,]);
+        $this->call([
+            PaymentSeeder::class,]);
 
 
     }
