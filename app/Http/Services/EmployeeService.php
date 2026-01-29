@@ -54,14 +54,14 @@ class EmployeeService
 
         if ($employee->user) {
             $employee->user->update([
-                'full_name' => $data['full_name'] ?? $employee->users->full_name,
-                'phone_number' => $data['phone_number'] ?? $employee->users->phone_number,
-                'email' => $data['email'] ?? $employee->users->email,
-                'password' => isset($data['password']) ? Hash::make($data['password']) : $employee->users->password,
+                'full_name' => $data['full_name'] ?? $employee->user->full_name,
+                'phone_number' => $data['phone_number'] ?? $employee->user->phone_number,
+                'email' => $data['email'] ?? $employee->user->email,
+                'password' => isset($data['password']) ? Hash::make($data['password']) : $employee->user->password,
             ]);
         }
 
-        return $employee->load('users');
+        return $employee->load('user');
     }
 
     public function delete(Employee $employee)

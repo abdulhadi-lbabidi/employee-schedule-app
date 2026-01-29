@@ -66,4 +66,18 @@ class AttendanceService
         return $attendance;
     }
 
+
+    public function syncAttendance(array $data)
+    {
+        return Attendance::updateOrCreate(
+            [
+                'employee_id' => $data['employee_id'],
+                'check_in' => $data['check_in'],
+            ],
+            $data
+        );
+    }
+
+
+
 }

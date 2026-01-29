@@ -22,9 +22,19 @@ class CreateAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
+            // 'employee_id' => 'required|exists:employees,id',
+            // 'workshop_id' => 'required|exists:workshops,id',
+            // 'note' => 'nullable|string',
             'employee_id' => 'required|exists:employees,id',
             'workshop_id' => 'required|exists:workshops,id',
+            'date' => 'required|date',
+            'check_in' => 'required|date_format:Y-m-d H:i:s',
+            'check_out' => 'nullable|date_format:Y-m-d H:i:s',
+            'week_number' => 'required|integer',
+            'regular_hours' => 'required|numeric',
+            'overtime_hours' => 'required|numeric',
             'note' => 'nullable|string',
+            'status' => 'required|in:مؤرشف,قيد الرفع',
         ];
     }
 }

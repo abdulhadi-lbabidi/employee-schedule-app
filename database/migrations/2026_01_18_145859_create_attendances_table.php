@@ -23,7 +23,6 @@ return new class extends Migration {
             $table->text('note')->nullable();
             $table->double('regular_hours')->default(0);
             $table->double('overtime_hours')->default(0);
-
             $table->enum('status', ['مؤرشف', 'قيد الرفع']);
             $table->timestamps();
         });

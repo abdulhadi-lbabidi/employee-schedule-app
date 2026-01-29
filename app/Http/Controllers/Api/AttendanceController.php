@@ -43,4 +43,10 @@ class AttendanceController extends Controller
     {
         return new AttendanceResource($attendance->load(['employee', 'workshop']));
     }
+    public function sync(CreateAttendanceRequest $request)
+    {
+        $attendance = $this->attendanceService->syncAttendance($request->validated());
+
+        return new AttendanceResource($attendance);
+    }
 }
