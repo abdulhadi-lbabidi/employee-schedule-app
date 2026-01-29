@@ -86,7 +86,7 @@ class EmployeeService
             $employee->user()->withTrashed()->restore();
         }
 
-        return $employee->load('users');
+        return $employee->load('user');
     }
 
 }
