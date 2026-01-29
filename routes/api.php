@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WeeklyHistoryController;
 use App\Http\Controllers\Api\WorkshopController;
 use Illuminate\Support\Facades\Route;
 
@@ -81,6 +82,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('rewards/{id}/force-delete', [RewardController::class, 'forceDelete']);
 
         Route::post('notifications/send', [NotificationController::class, 'send']);
+
+        Route::apiResource('weekly-histories', WeeklyHistoryController::class)->only(['index', 'store']);
+        Route::post('weekly-histories/{weeklyHistory}/toggle-payment', [WeeklyHistoryController::class, 'togglePayment']);
 
     });
 
