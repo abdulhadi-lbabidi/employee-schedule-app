@@ -35,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
 
 
+    Route::get('my-attendance/{employeeId}', [AttendanceController::class, 'employeeHistory']);
+    Route::get('/attendance', [AttendanceController::class, 'index']);
+
     Route::get('loans', [LoanController::class, 'index']);
     Route::get('loans/{loan}', [LoanController::class, 'show']);
     Route::post('loans', [LoanController::class, 'store']);
@@ -88,8 +91,10 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::middleware('role:employee')->group(function () {
         Route::prefix('attendances')->group(function () {
-            Route::post('check-in', [AttendanceController::class, 'checkIn']);
-            Route::post('check-out/{employee}', [AttendanceController::class, 'checkOut']);
+            // Route::post('check-in', [AttendanceController::class, 'checkIn']);
+            // Route::post('check-out/{employee}', [AttendanceController::class, 'checkOut']);
+            // offline
+            Route::post('sync', [AttendanceController::class, 'sync']);
         });
         Route::put('loans/{loan}', [LoanController::class, 'update']);
 

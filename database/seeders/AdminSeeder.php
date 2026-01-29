@@ -20,7 +20,7 @@ class AdminSeeder extends Seeder
             'phone_number'=>'0946963546',
             'profile_image_url'=>null,
             'email'=>'abdulrahmannouh@nouh-agency.com',
-            'password'=>bcrypt('123.321A'),
+            'password'=>bcrypt('12345678'),
         ]);
         Admin::factory()->create([
             'name' => 'Ahmed Shahrour',
@@ -29,7 +29,7 @@ class AdminSeeder extends Seeder
             'phone_number'=>'0932893379',
             'profile_image_url'=>null,
             'email'=>'ahmadshahrour@nouh-agency.com',
-            'password'=>bcrypt('123.321A'),
+            'password'=>bcrypt('12345678'),
         ]);
         Admin::factory()->create([
             'name' => 'Hatem Alsaleh',
@@ -38,7 +38,7 @@ class AdminSeeder extends Seeder
             'phone_number'=>'0935936396',
             'profile_image_url'=>null,
             'email'=>null,
-            'password'=>bcrypt('123.321A'),
+            'password'=>bcrypt('12345678'),
         ]);
         Admin::factory()->create([
             'name' => 'Abdalhadi Lbabidi',
@@ -47,7 +47,7 @@ class AdminSeeder extends Seeder
             'phone_number'=>'0957464304',
             'profile_image_url'=>null,
             'email'=>null,
-            'password'=>bcrypt('123.321A'),
+            'password'=>bcrypt('12345678'),
         ]);
     }
 }

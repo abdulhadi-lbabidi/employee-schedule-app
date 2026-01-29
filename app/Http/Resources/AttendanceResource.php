@@ -21,6 +21,7 @@ class AttendanceResource extends JsonResource
                 'id' => $this->employee?->id,
                 'position' => $this->employee?->position,
                 'department' => $this->employee?->department,
+                'user' => new UserResource($this->employee?->user),
             ],
 
             'workshop' => [

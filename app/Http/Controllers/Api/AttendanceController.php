@@ -21,22 +21,29 @@ class AttendanceController extends Controller
         return AttendanceResource::collection($attendances);
     }
 
-    public function checkIn(CreateAttendanceRequest $request)
+    public function employeeHistory($employeeId)
     {
-        $attendance = $this->attendanceService->checkIn(
-            $request->employee_id,
-            $request->workshop_id,
-            $request->note ?? null
-        );
+        $records = $this->attendanceService->getEmployeeRecords($employeeId);
 
-        return new AttendanceResource($attendance);
+        return AttendanceResource::collection($records);
     }
 
-    public function checkOut($employeeId)
-    {
-        $attendance = $this->attendanceService->checkOut($employeeId);
-        return new AttendanceResource($attendance);
-    }
+    // public function checkIn(CreateAttendanceRequest $request)
+    // {
+    //     $attendance = $this->attendanceService->checkIn(
+    //         $request->employee_id,
+    //         $request->workshop_id,
+    //         $request->note ?? null
+    //     );
+
+    //     return new AttendanceResource($attendance);
+    // }
+
+    // public function checkOut($employeeId)
+    // {
+    //     $attendance = $this->attendanceService->checkOut($employeeId);
+    //     return new AttendanceResource($attendance);
+    // }
 
 
     public function show(Attendance $attendance)
