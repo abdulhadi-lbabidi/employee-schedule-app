@@ -55,47 +55,47 @@ class EmployeeSeeder extends Seeder
                     'email' => null,
                     'password' => bcrypt('12345678'),
                 ]);
-        Employee::factory()->create([
-            'position' => 'daily worker',
-            'department' => 'Executer & Watcher',
-            'hourly_rate' => 7,
-            'overtime_rate' => 1,
-            'is_online' => false,
-            'current_location' => 'W115',
-        ])->user()->create([
-                    'full_name' => 'Mahmoud Ibrahim',
-                    'phone_number' => '0939405822',
-                    'profile_image_url' => null,
-                    'email' => null,
-                    'password' => bcrypt('12345678'),
-                ]);
-        Employee::factory()->create([
-            'position' => 'daily worker',
-            'department' => 'Executer & Watcher',
-            'hourly_rate' => 7,
-            'overtime_rate' => 1,
-            'is_online' => false,
-            'current_location' => 'W112',
-        ])->user()->create([
-                    'full_name' => 'Anas Karman',
-                    'phone_number' => '0968004871',
-                    'profile_image_url' => null,
-                    'email' => null,
-                    'password' => bcrypt('12345678'),
-                ]);
-        Employee::factory()->create([
-            'position' => 'daily worker',
-            'department' => 'Executer & Watcher',
-            'hourly_rate' => 10,
-            'overtime_rate' => 1,
-            'is_online' => false,
-            'current_location' => 'W120',
-        ])->user()->create([
-                    'full_name' => 'fake user',
-                    'phone_number' => '0999999999',
-                    'profile_image_url' => null,
-                    'email' => null,
-                    'password' => bcrypt('12345678'),
-                ]);
+        // Employee::factory()->create([
+        //     'position' => 'daily worker',
+        //     'department' => 'Executer & Watcher',
+        //     'hourly_rate' => 7,
+        //     'overtime_rate' => 1,
+        //     'is_online' => false,
+        //     'current_location' => 'W115',
+        // ])->user()->create([
+        //             'full_name' => 'Mahmoud Ibrahim',
+        //             'phone_number' => '0939405822',
+        //             'profile_image_url' => null,
+        //             'email' => null,
+        //             'password' => bcrypt('12345678'),
+        //         ]);
+        // Employee::factory()->create([
+        //     'position' => 'daily worker',
+        //     'department' => 'Executer & Watcher',
+        //     'hourly_rate' => 7,
+        //     'overtime_rate' => 1,
+        //     'is_online' => false,
+        //     'current_location' => 'W112',
+        // ])->user()->create([
+        //             'full_name' => 'Anas Karman',
+        //             'phone_number' => '0968004871',
+        //             'profile_image_url' => null,
+        //             'email' => null,
+        //             'password' => bcrypt('12345678'),
+        //         ]);
+        // Employee::factory()->create([
+        //     'position' => 'daily worker',
+        //     'department' => 'Executer & Watcher',
+        //     'hourly_rate' => 10,
+        //     'overtime_rate' => 1,
+        //     'is_online' => false,
+        //     'current_location' => 'W120',
+        // ])->user()->create([
+        //             'full_name' => 'fake user',
+        //             'phone_number' => '0999999999',
+        //             'profile_image_url' => null,
+        //             'email' => null,
+        //             'password' => bcrypt('12345678'),
+        //         ]);
     }
 }
