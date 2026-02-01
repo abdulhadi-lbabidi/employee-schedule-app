@@ -35,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
 
+    Route::get('workshops', [WorkshopController::class, 'index']);
+    Route::get('workshops/{workshop}', [WorkshopController::class, 'show']);
 
     Route::get('my-attendance/{employeeId}', [AttendanceController::class, 'employeeHistory']);
     Route::get('/attendance', [AttendanceController::class, 'index']);
@@ -58,7 +60,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('employees/{id}/restore', [EmployeeController::class, 'restore']);
         Route::delete('employees/{id}/force-delete', [EmployeeController::class, 'forceDelete']);
 
-        Route::apiResource('workshops', WorkshopController::class);
+        Route::post('workshops', [WorkshopController::class, 'store']);
+        Route::put('workshops/{workshop}', [WorkshopController::class, 'update']);
+        Route::delete('workshops/{workshop}', [WorkshopController::class, 'destroy']);
         Route::get('workshops-archived', [WorkshopController::class, 'archived']);
         Route::post('workshops/{id}/restore', [WorkshopController::class, 'restore']);
         Route::delete('workshops/{id}/force-delete', [WorkshopController::class, 'forceDelete']);
