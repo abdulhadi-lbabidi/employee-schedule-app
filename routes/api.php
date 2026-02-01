@@ -30,7 +30,11 @@ Route::apiResource('admins', AdminController::class);
 */
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
+
+
+});
+
+Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
 
     Route::get('me', [AuthController::class, 'me']);
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
@@ -50,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     |   (Admin Panel)
     |----------------------------------------------------------------------
     */
+
     Route::middleware('role:admin')->group(function () {
         Route::get('admins-archived', [AdminController::class, 'archived']);
         Route::post('admins/{id}/restore', [AdminController::class, 'restore']);
@@ -107,5 +112,3 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('loans/{loan}', [LoanController::class, 'update']);
 
     });
-
-});
