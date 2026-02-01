@@ -23,6 +23,8 @@ class Attendance extends Model
     ];
 
     protected $casts = [
+        'employee_id'=> 'integer',
+        'workshop_id'=> 'integer',
         'date' => 'date',
         'check_in' => 'datetime',
         'check_out' => 'datetime',
