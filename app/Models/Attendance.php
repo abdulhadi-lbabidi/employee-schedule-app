@@ -26,8 +26,8 @@ class Attendance extends Model
         'employee_id'=> 'integer',
         'workshop_id'=> 'integer',
         'date' => 'date',
-        'check_in' => 'integer',
-        'check_out' => 'integer',
+        'check_in' => 'datetime',
+        'check_out' => 'datetime',
     ];
 
 
