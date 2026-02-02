@@ -52,8 +52,13 @@ class AttendanceController extends Controller
     }
     public function sync(CreateAttendanceRequest $request)
     {
-        $attendance = $this->attendanceService->syncAttendance($request->validated());
+        $result = [];
 
-        return new AttendanceResource($attendance);
+        foreach ($request->validated() as $item) {
+            $result[] = $this->attendanceService->syncAttendance($item);
+        }
+
+        return AttendanceResource::collection($result);
     }
+
 }
