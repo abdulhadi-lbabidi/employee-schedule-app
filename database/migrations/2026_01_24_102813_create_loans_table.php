@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->foreignIdFor(Admin::class);
             $table->integer('amount');
             $table->integer('paid_amount');
-            $table->enum('role', ['قيد الانتظار ', 'مدفوعة جزئياً', 'مسددة بالكامل'])->default('قيد الانتظار ');
+            $table->enum('role', ['waiting', 'compoleted','partially'])->default('waiting');
             $table->date('date');
             $table->softDeletes();
             $table->timestamps();

@@ -20,7 +20,9 @@ class Loan extends Model
     ];
 
     protected $casts = [
-        'date' => 'datetime'
+        'date' => 'datetime',
+        'amount' => 'double',
+        'role' => 'string'
     ];
 
 

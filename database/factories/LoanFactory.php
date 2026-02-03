@@ -25,7 +25,7 @@ class LoanFactory extends Factory
             'admin_id'=>Admin::all()->random()->id,
             'amount'=>$number,
             'paid_amount'=>fake()->randomElement([$number/2, $number/3, $number/4, $number]),
-            'role'=>fake()->randomElement(['قيد الانتظار ', 'مدفوعة جزئياً', 'مسددة بالكامل']),
+            'role'=>fake()->randomElement(['waiting', 'compoleted','partially']),
             'date'=>Carbon::createFromDate(2026,1),
         ];
     }
