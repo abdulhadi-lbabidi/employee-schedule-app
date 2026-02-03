@@ -29,11 +29,6 @@ Route::apiResource('admins', AdminController::class);
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->group(function () {
-
-
-
-});
-
 Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
 
     Route::get('me', [AuthController::class, 'me']);
@@ -55,7 +50,7 @@ Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
     |----------------------------------------------------------------------
     */
 
-    // Route::middleware('role:admin')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         Route::get('admins-archived', [AdminController::class, 'archived']);
         Route::post('admins/{id}/restore', [AdminController::class, 'restore']);
         Route::delete('admins/{id}/force-delete', [AdminController::class, 'forceDelete']);
@@ -95,20 +90,25 @@ Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
         Route::apiResource('weekly-histories', WeeklyHistoryController::class)->only(['index', 'store']);
         Route::post('weekly-histories/{weeklyHistory}/toggle-payment', [WeeklyHistoryController::class, 'togglePayment']);
 
-    // });
+    });
 
     /*
     |----------------------------------------------------------------------
     |   (Employee Panel)
     |----------------------------------------------------------------------
     */
-    // Route::middleware('role:employee')->group(function () {
+    Route::middleware('role:employee')->group(function () {
         Route::prefix('attendances')->group(function () {
-            // Route::post('check-in', [AttendanceController::class, 'checkIn']);
-            // Route::post('check-out/{employee}', [AttendanceController::class, 'checkOut']);
+            Route::post('check-in', [AttendanceController::class, 'checkIn']);
+            Route::post('check-out/{employee}', [AttendanceController::class, 'checkOut']);
             // offline
             Route::post('sync', [AttendanceController::class, 'sync']);
         });
         Route::put('loans/{loan}', [LoanController::class, 'update']);
 
-    // });
+    });
+
+
+});
+
+
