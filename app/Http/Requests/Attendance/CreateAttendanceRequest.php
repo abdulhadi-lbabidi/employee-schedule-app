@@ -19,20 +19,20 @@ class CreateAttendanceRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
- public function rules(): array
-{
-    return [
-        '*.employee_id' => 'required|exists:employees,id',
-        '*.workshop_id' => 'required|exists:workshops,id',
-        '*.date' => 'required|date',
-        '*.check_in' => 'required|date_format:H:i:s',
-        '*.check_out' => 'nullable|date_format:H:i:s',
-        '*.week_number' => 'required|integer',
-        '*.regular_hours' => 'required|numeric',
-        '*.overtime_hours' => 'required|numeric',
-        '*.note' => 'nullable|string',
-        '*.status' => 'required|in:مؤرشف,قيد الرفع',
-    ];
-}
+    public function rules(): array
+    {
+        return [
+            '*.employee_id' => 'required|exists:employees,id',
+            '*.workshop_id' => 'required|exists:workshops,id',
+            '*.date' => 'required|date',
+            '*.check_in' => 'required|date_format:H:i:s',
+            '*.check_out' => 'nullable|date_format:H:i:s',
+            '*.week_number' => 'required|integer',
+            '*.regular_hours' => 'required|numeric',
+            '*.overtime_hours' => 'required|numeric',
+            '*.note' => 'nullable|string',
+            '*.status' => 'required|in:مؤرشف,قيد الرفع',
+        ];
+    }
 
 }

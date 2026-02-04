@@ -60,6 +60,15 @@ class AttendanceService
                 AllowedFilter::callback('end_date', function ($query, $value) {
                     $query->where('date', '<=', $value);
                 }),
+
+                AllowedFilter::callback('month', function ($query, $value) {
+                    $query->whereMonth('date', $value);
+                }),
+
+                AllowedFilter::callback('year', function ($query, $value) {
+                    $query->whereYear('date', $value);
+                }),
+
             ])
             ->allowedSorts(['date', 'check_in'])
             ->defaultSort('-date', '-check_in')
