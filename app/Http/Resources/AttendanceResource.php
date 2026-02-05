@@ -35,7 +35,6 @@ class AttendanceResource extends JsonResource
             'check_in' => $this->check_in?->format('H:i:s'),
             'check_out' => $this->check_out?->format('H:i:s'),
 
-
             'week_number' => $this->week_number,
             'regular_hours' => $this->regular_hours,
             'overtime_hours' => $this->overtime_hours,

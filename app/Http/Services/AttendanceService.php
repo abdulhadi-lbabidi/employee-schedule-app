@@ -42,34 +42,42 @@ class AttendanceService
             ->paginate(15);
     }
 
+
+
     public function getEmployeeRecords($employeeId)
     {
-        return QueryBuilder::for(Attendance::class)
+        $records = QueryBuilder::for(Attendance::class)
             ->where('employee_id', $employeeId)
             ->with('workshop')
             ->allowedFilters([
                 AllowedFilter::exact('workshop_id'),
                 AllowedFilter::exact('status'),
-                'date',
                 AllowedFilter::callback('start_date', function ($query, $value) {
-                    $query->where('date', '>=', $value);
+                    $query->whereDate('date', '>=', $value);
                 }),
                 AllowedFilter::callback('end_date', function ($query, $value) {
-                    $query->where('date', '<=', $value);
+                    $query->whereDate('date', '<=', $value);
                 }),
-
                 AllowedFilter::callback('month', function ($query, $value) {
                     $query->whereMonth('date', $value);
                 }),
-
                 AllowedFilter::callback('year', function ($query, $value) {
                     $query->whereYear('date', $value);
                 }),
-
             ])
-            ->allowedSorts(['date', 'check_in'])
-            ->defaultSort('-date', '-check_in')
-            ->paginate(10);
+            ->orderBy('date')
+            ->get();
+
+        $grouped = $records->groupBy(function ($item) {
+            $date = Carbon::parse($item->date);
+
+            $startOfWeek = $date->copy()->startOfWeek(Carbon::SATURDAY);
+            $endOfWeek = $date->copy()->endOfWeek(Carbon::FRIDAY);
+
+            return $startOfWeek->format('Y-m-d') . ' إلى ' . $endOfWeek->format('Y-m-d');
+        });
+
+        return $grouped;
     }
 
 
@@ -86,6 +94,7 @@ class AttendanceService
                 'employee_id' => $data['employee_id'],
                 'check_in' => $data['check_in'],
                 'workshop_id' => $data['workshop_id'],
+                'date' => $data['date'],
             ],
             $data
         );

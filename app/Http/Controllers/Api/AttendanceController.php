@@ -24,7 +24,12 @@ class AttendanceController extends Controller
     public function employeeHistory($employeeId)
     {
         $records = $this->attendanceService->getEmployeeRecords($employeeId);
-        return AttendanceResource::collection($records);
+
+        return $records->map(function ($weekRecords) {
+            return AttendanceResource::collection($weekRecords);
+        });
+
+
     }
 
     public function show(Attendance $attendance)
