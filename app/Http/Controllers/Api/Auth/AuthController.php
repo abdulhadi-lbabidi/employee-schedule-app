@@ -12,8 +12,7 @@ class AuthController extends Controller
 {
     public function __construct(
         private AuthService $authService
-    ) {
-    }
+    ) {}
 
     public function login(LoginRequest $request)
     {
@@ -63,5 +62,17 @@ class AuthController extends Controller
     }
 
 
-   
+    public function logout()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+        $user->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully',
+            'status' => 200
+        ]);
+    }
 }

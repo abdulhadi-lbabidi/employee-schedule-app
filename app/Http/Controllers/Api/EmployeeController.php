@@ -50,10 +50,7 @@ class EmployeeController extends Controller
         return response()->json([
             'message' => 'Admin archived successfully'
         ]);
-
     }
-
-
 
     public function restore($id)
     {

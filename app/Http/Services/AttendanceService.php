@@ -2,11 +2,10 @@
 
 namespace App\Http\Services;
 
-use App\Models\Attendance;
-
-use Carbon\Carbon;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Models\Attendance;
+use Carbon\Carbon;
 
 class AttendanceService
 {
@@ -30,12 +29,10 @@ class AttendanceService
                     $query->where('overtime_hours', '>=', $value);
                 }),
 
-                // فلتر من تاريخ
                 AllowedFilter::callback('start_date', function ($query, $value) {
                     $query->where('date', '>=', $value);
                 }),
 
-                // فلتر إلى تاريخ
                 AllowedFilter::callback('end_date', function ($query, $value) {
                     $query->where('date', '<=', $value);
                 }),
@@ -75,57 +72,7 @@ class AttendanceService
             ->paginate(10);
     }
 
-    // for online
-    // public function checkIn($employeeId, $workshopId, $note = null)
-    // {
-    //     $open = Attendance::where('employee_id', $employeeId)
-    //         ->whereNull('check_out')
-    //         ->first();
 
-    //     if ($open) {
-    //         throw new \Exception('Employee already checked in');
-    //     }
-
-    //     return Attendance::create([
-    //         'employee_id' => $employeeId,
-    //         'workshop_id' => $workshopId,
-    //         'date' => now()->toDateString(),
-    //         'week_number' => now()->weekOfYear,
-    //         'check_in' => now(),
-    //         'note' => $note,
-    //         'status' => 'قيد الرفع',
-    //     ]);
-    // }
-
-    // public function checkOut($employeeId)
-    // {
-    //     $attendance = Attendance::where('employee_id', $employeeId)
-    //         ->whereNull('check_out')
-    //         ->latest('check_in')
-    //         ->first();
-
-    //     if (!$attendance) {
-    //         throw new \Exception('No open attendance found');
-    //     }
-
-    //     $checkIn = $attendance->check_in;
-    //     $checkOut = now();
-
-    //     $hours = round($checkIn->diffInMinutes($checkOut) / 60, 2);
-
-
-    //     $regular = min($hours, 8);
-    //     $overtime = max($hours - 8, 0);
-
-    //     $attendance->update([
-    //         'check_out' => $checkOut,
-    //         'regular_hours' => $regular,
-    //         'overtime_hours' => $overtime,
-    //         'status' => 'مؤرشف',
-    //     ]);
-
-    //     return $attendance;
-    // }
 
 
     public function syncAttendance(array $data)
@@ -134,7 +81,6 @@ class AttendanceService
         if (isset($data['check_out'])) {
             $data['check_out'] = Carbon::parse($data['check_out'])->toDateTimeString();
         }
-
         return Attendance::updateOrCreate(
             [
                 'employee_id' => $data['employee_id'],

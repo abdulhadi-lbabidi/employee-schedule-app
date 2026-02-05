@@ -29,7 +29,7 @@ Route::apiResource('admins', AdminController::class);
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->group(function () {
-Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
+    Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
 
     Route::get('me', [AuthController::class, 'me']);
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
@@ -43,6 +43,8 @@ Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
     Route::get('loans', [LoanController::class, 'index']);
     Route::get('loans/{loan}', [LoanController::class, 'show']);
     Route::post('loans', [LoanController::class, 'store']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     /*
     |----------------------------------------------------------------------
@@ -110,5 +112,3 @@ Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
 
 
 });
-
-

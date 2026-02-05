@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Attendance\CreateAttendanceRequest;
 use App\Http\Resources\AttendanceResource;
 use App\Http\Services\AttendanceService;
+use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 
 class AttendanceController extends Controller
@@ -24,27 +24,8 @@ class AttendanceController extends Controller
     public function employeeHistory($employeeId)
     {
         $records = $this->attendanceService->getEmployeeRecords($employeeId);
-
         return AttendanceResource::collection($records);
     }
-
-    // public function checkIn(CreateAttendanceRequest $request)
-    // {
-    //     $attendance = $this->attendanceService->checkIn(
-    //         $request->employee_id,
-    //         $request->workshop_id,
-    //         $request->note ?? null
-    //     );
-
-    //     return new AttendanceResource($attendance);
-    // }
-
-    // public function checkOut($employeeId)
-    // {
-    //     $attendance = $this->attendanceService->checkOut($employeeId);
-    //     return new AttendanceResource($attendance);
-    // }
-
 
     public function show(Attendance $attendance)
     {
