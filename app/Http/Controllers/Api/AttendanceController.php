@@ -25,11 +25,12 @@ class AttendanceController extends Controller
     {
         $records = $this->attendanceService->getEmployeeRecords($employeeId);
 
-        return $records->map(function ($weekRecords) {
-            return AttendanceResource::collection($weekRecords);
-        });
-
-
+        return $records->map(function ($weekRecords, $weekLabel) {
+            return [
+                'week' => $weekLabel,
+                'attendances' => AttendanceResource::collection($weekRecords),
+            ];
+        })->values();
     }
 
     public function show(Attendance $attendance)
