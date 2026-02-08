@@ -22,12 +22,8 @@ class CreateLoanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_id' => 'required|exists:employees,id',
-            'admin_id' => 'required|exists:admins,id',
-            'amount' => 'required|numeric',
-            'paid_amount' => 'required|numeric',
-            'role' => 'required|in:waiting,competed,partially',
-            'date' => 'required',
+            'amount' => 'required|numeric|min:1',
+            'date' => 'required|date',
         ];
     }
 }

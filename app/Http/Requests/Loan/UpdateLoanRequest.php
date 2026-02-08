@@ -22,11 +22,7 @@ class UpdateLoanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_id' => 'sometimes|exists:employees,id',
-            'admin_id' => 'sometimes|exists:admins,id',
-            'amount' => 'sometimes|numeric',
-            'paid_amount' => 'sometimes|numeric',
-            'role' => 'sometimes|in:waiting,competed,partially',
+            'amount' => 'sometimes|numeric|min:1',
             'date' => 'sometimes|date',
         ];
     }

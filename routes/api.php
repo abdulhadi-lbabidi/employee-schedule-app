@@ -57,11 +57,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('admins/{id}/restore', [AdminController::class, 'restore']);
         Route::delete('admins/{id}/force-delete', [AdminController::class, 'forceDelete']);
 
+        // employee
         Route::apiResource('employees', EmployeeController::class);
         Route::get('employees-archived', [EmployeeController::class, 'archived']);
         Route::post('employees/{id}/restore', [EmployeeController::class, 'restore']);
         Route::delete('employees/{id}/force-delete', [EmployeeController::class, 'forceDelete']);
 
+        // workshop
         Route::post('workshops', [WorkshopController::class, 'store']);
         Route::put('workshops/{workshop}', [WorkshopController::class, 'update']);
         Route::delete('workshops/{workshop}', [WorkshopController::class, 'destroy']);
@@ -71,17 +73,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('attendances', [AttendanceController::class, 'index']);
 
+        //loan
         Route::get('loans-archived', [LoanController::class, 'archived']);
         Route::post('loans/{id}/restore', [LoanController::class, 'restore']);
         Route::delete('loans/{id}/force-delete', [LoanController::class, 'forceDelete']);
         Route::delete('loans/{loan}', [LoanController::class, 'destroy']);
+        Route::post('loans/{loan}/approve', [LoanController::class, 'approve']);
+        Route::post('loans/{loan}/reject', [LoanController::class, 'reject']);
+        Route::post('loans/{loan}/pay', [LoanController::class, 'pay']);
 
+        // payment
         Route::apiResource('payments', PaymentController::class);
-
         Route::get('payments-archived', [PaymentController::class, 'archived']);
         Route::post('payments/{id}/restore', [PaymentController::class, 'restore']);
         Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete']);
 
+        // reward
         Route::apiResource('rewards', RewardController::class);
         Route::get('rewards-archived', [RewardController::class, 'archived']);
         Route::post('rewards/{id}/restore', [RewardController::class, 'restore']);

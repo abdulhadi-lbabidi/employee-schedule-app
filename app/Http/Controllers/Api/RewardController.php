@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reward\CreateRewardRequest;
 use App\Http\Requests\Reward\UpdateRewardRequest;
-use App\Http\Resources\PaymentResource;
 use App\Http\Resources\RewardResource;
 use App\Http\Services\RewardService;
 use App\Models\Reward;
-use Illuminate\Http\Request;
 
 class RewardController extends Controller
 {
@@ -27,24 +25,24 @@ class RewardController extends Controller
     public function archived()
     {
         $reward = $this->rewardService->getArchived();
-        return PaymentResource::collection($reward);
+        return RewardResource::collection($reward);
     }
     public function store(CreateRewardRequest $request)
     {
         $reward = $this->rewardService->create($request->validated());
-        return new PaymentResource($reward);
+        return new RewardResource($reward);
     }
 
     public function show(Reward $reward)
     {
-        return new PaymentResource($reward->load('employee'));
+        return new RewardResource($reward->load('employee'));
     }
 
 
     public function update(UpdateRewardRequest $request, Reward $reward)
     {
         $reward = $this->rewardService->update($reward, $request->validated());
-        return new PaymentResource($reward);
+        return new RewardResource($reward);
     }
 
     public function destroy(Reward $reward)

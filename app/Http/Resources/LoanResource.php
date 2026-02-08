@@ -16,10 +16,10 @@ class LoanResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'amount'=> $this->amount,
-            'paid_amount'=> $this->paid_amount,
-            'role'=> $this->role,
-            'date'=> $this->date,
+            'amount' => $this->amount,
+            'paid_amount' => $this->paid_amount,
+            'status' => $this->status,
+            'date' => $this->date->format('d-m-Y'),
             'employee' => [
                 'id' => $this->employee->id ?? null,
                 'full_name' => $this->employee->user->full_name ?? null,

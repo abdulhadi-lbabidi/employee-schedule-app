@@ -8,7 +8,6 @@ use App\Http\Requests\Loan\UpdateLoanRequest;
 use App\Http\Resources\LoanResource;
 use App\Http\Services\LoanService;
 use App\Models\Loan;
-use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
@@ -67,5 +66,24 @@ class LoanController extends Controller
         $this->loanService->forceDelete($employee);
 
         return response()->json(['message' => 'Employee permanently deleted']);
+    }
+
+
+    public function approve(Loan $loan)
+    {
+        $this->loanService->approve($loan);
+        return response()->json(['message' => 'Loan approved']);
+    }
+
+    public function reject(Loan $loan)
+    {
+        $this->loanService->reject($loan);
+        return response()->json(['message' => 'Loan rejected']);
+    }
+
+    public function pay(Loan $loan)
+    {
+        $this->loanService->pay($loan, request('amount'));
+        return response()->json(['message' => 'Payment recorded']);
     }
 }

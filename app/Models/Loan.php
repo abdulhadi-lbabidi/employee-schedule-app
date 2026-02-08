@@ -15,7 +15,7 @@ class Loan extends Model
         'admin_id',
         'amount',
         'paid_amount',
-        'role',
+        'status',
         'date',
     ];
 
