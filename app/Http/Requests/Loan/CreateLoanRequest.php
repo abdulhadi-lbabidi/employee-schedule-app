@@ -26,7 +26,7 @@ class CreateLoanRequest extends FormRequest
             'admin_id' => 'required|exists:admins,id',
             'amount' => 'required|numeric',
             'paid_amount' => 'required|numeric',
-            'role' => 'required',
+            'role' => 'required|in:waiting,competed,partially',
             'date' => 'required',
         ];
     }

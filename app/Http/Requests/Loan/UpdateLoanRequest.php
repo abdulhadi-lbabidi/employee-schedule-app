@@ -26,7 +26,7 @@ class UpdateLoanRequest extends FormRequest
             'admin_id' => 'sometimes|exists:admins,id',
             'amount' => 'sometimes|numeric',
             'paid_amount' => 'sometimes|numeric',
-            'role' => 'sometimes|in:قيد الانتظار , مدفوعة جزئياً, مسددة بالكامل',
+            'role' => 'sometimes|in:waiting,competed,partially',
             'date' => 'sometimes|date',
         ];
     }
