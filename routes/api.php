@@ -46,6 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('loans/{loan}', [LoanController::class, 'show']);
     Route::post('loans', [LoanController::class, 'store']);
 
+    Route::get('rewards/{reward}', [RewardController::class, 'show']);
+
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
     /*
@@ -92,7 +95,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete']);
 
         // reward
-        Route::apiResource('rewards', RewardController::class);
+        // Route::apiResource('rewards', RewardController::class);
+        Route::get('rewards', [RewardController::class, 'index']);
+        Route::post('rewards', [RewardController::class, 'store']);
+        Route::put('rewards/{reward}', [RewardController::class, 'update']);
+        Route::delete('rewards/{reward}', [RewardController::class, 'destroy']);
         Route::get('rewards-archived', [RewardController::class, 'archived']);
         Route::post('rewards/{id}/restore', [RewardController::class, 'restore']);
         Route::delete('rewards/{id}/force-delete', [RewardController::class, 'forceDelete']);
