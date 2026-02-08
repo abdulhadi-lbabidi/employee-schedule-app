@@ -2,10 +2,12 @@
 
 namespace App\Http\Services;
 
+use App\Models\Attendance;
+use App\Models\Employee;
+use App\Models\Workshop;
+use Carbon\Carbon;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Models\Attendance;
-use Carbon\Carbon;
 
 class AttendanceService
 {
@@ -80,8 +82,48 @@ class AttendanceService
         return $grouped;
     }
 
+    public function getEmployeeHoursByWorkshop($employeeId)
+    {
+        $aggregated = Attendance::query()
+            ->where('employee_id', $employeeId)
+            ->selectRaw('workshop_id, SUM(regular_hours) as total_regular_hours, SUM(overtime_hours) as total_overtime_hours')
+            ->groupBy('workshop_id')
+            ->get();
+
+        $workshopIds = $aggregated->pluck('workshop_id')->unique()->filter()->values()->all();
+        $workshops = Workshop::query()->whereIn('id', $workshopIds)->get()->keyBy('id');
+
+        return $aggregated->map(function ($row) use ($workshops) {
+            $workshop = $workshops->get($row->workshop_id);
+            return [
+                'workshop' => $workshop,
+                'total_regular_hours' => round((float) $row->total_regular_hours, 2),
+                'total_overtime_hours' => round((float) $row->total_overtime_hours, 2),
+            ];
+        })->filter(fn($row) => $row['workshop'] !== null)->values();
+    }
 
 
+    public function getWorkshopHoursByEmployee($workshopId)
+    {
+        $aggregated = Attendance::query()
+            ->where('workshop_id', $workshopId)
+            ->selectRaw('employee_id, SUM(regular_hours) as total_regular_hours, SUM(overtime_hours) as total_overtime_hours')
+            ->groupBy('employee_id')
+            ->get();
+
+        $employeeIds = $aggregated->pluck('employee_id')->unique()->filter()->values()->all();
+        $employees = Employee::query()->with('user')->whereIn('id', $employeeIds)->get()->keyBy('id');
+
+        return $aggregated->map(function ($row) use ($employees) {
+            $employee = $employees->get($row->employee_id);
+            return [
+                'employee' => $employee,
+                'total_regular_hours' => round((float) $row->total_regular_hours, 2),
+                'total_overtime_hours' => round((float) $row->total_overtime_hours, 2),
+            ];
+        })->filter(fn($row) => $row['employee'] !== null)->values();
+    }
 
     public function syncAttendance(array $data)
     {

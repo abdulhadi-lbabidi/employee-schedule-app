@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('workshops/{workshop}', [WorkshopController::class, 'show']);
 
     Route::get('my-attendance/{employeeId}', [AttendanceController::class, 'employeeHistory']);
+    Route::get('employees/{employee}/hours-by-workshop', [AttendanceController::class, 'hoursByWorkshop']);
     Route::get('/attendance', [AttendanceController::class, 'index']);
 
     Route::get('loans', [LoanController::class, 'index']);
@@ -64,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('employees/{id}/force-delete', [EmployeeController::class, 'forceDelete']);
 
         // workshop
+        Route::get('workshops/{workshop}/hours-by-employee', [AttendanceController::class, 'workshopHoursByEmployee']);
         Route::post('workshops', [WorkshopController::class, 'store']);
         Route::put('workshops/{workshop}', [WorkshopController::class, 'update']);
         Route::delete('workshops/{workshop}', [WorkshopController::class, 'destroy']);
