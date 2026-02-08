@@ -103,6 +103,19 @@ class AttendanceService
         })->filter(fn($row) => $row['workshop'] !== null)->values();
     }
 
+    
+    public function getEmployeeTotalHours($employeeId)
+    {
+        $row = Attendance::query()
+            ->where('employee_id', $employeeId)
+            ->selectRaw('COALESCE(SUM(regular_hours), 0) as total_regular_hours, COALESCE(SUM(overtime_hours), 0) as total_overtime_hours')
+            ->first();
+
+        return [
+            'total_regular_hours' => round((float) $row->total_regular_hours, 2),
+            'total_overtime_hours' => round((float) $row->total_overtime_hours, 2),
+        ];
+    }
 
     public function getWorkshopHoursByEmployee($workshopId)
     {

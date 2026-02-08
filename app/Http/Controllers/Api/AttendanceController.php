@@ -7,6 +7,7 @@ use App\Http\Resources\AttendanceResource;
 use App\Http\Resources\WorkshopResource;
 use App\Http\Services\AttendanceService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\UserResource;
 use App\Models\Attendance;
 use App\Models\Employee;
@@ -61,13 +62,41 @@ class AttendanceController extends Controller
         ]);
     }
 
+
+    public function employeeHoursAndPaySummary(Request $request, Employee $employee)
+    {
+        $user = $request->user();
+        $isAdmin = $user->userable_type === 'Admin';
+        $isOwn = $user->userable_type === 'Employee' && (int) $user->userable_id === (int) $employee->id;
+        if (!$isAdmin && !$isOwn) {
+            abort(403, 'غير مصرح لك بعرض بيانات هذا الموظف.');
+        }
+
+        $hours = $this->attendanceService->getEmployeeTotalHours($employee->id);
+        $totalRegularHours = $hours['total_regular_hours'];
+        $totalOvertimeHours = $hours['total_overtime_hours'];
+
+        $regularPay = round($totalRegularHours * (float) $employee->hourly_rate, 2);
+        $overtimePay = round($totalOvertimeHours * (float) $employee->overtime_rate, 2);
+        $totalPay = round($regularPay + $overtimePay, 2);
+
+        return response()->json([
+            'employee' => new EmployeeResource($employee),
+            'total_regular_hours' => $totalRegularHours,
+            'total_overtime_hours' => $totalOvertimeHours,
+            'regular_pay' => $regularPay,
+            'overtime_pay' => $overtimePay,
+            'total_pay' => $totalPay,
+        ]);
+    }
+
     public function workshopHoursByEmployee(Workshop $workshop)
     {
         $rows = $this->attendanceService->getWorkshopHoursByEmployee($workshop->id);
 
         return response()->json([
             'workshop' => new WorkshopResource($workshop),
-            'employees' => $rows->map(fn ($row) => [
+            'employees' => $rows->map(fn($row) => [
                 'employee' => [
                     'id' => $row['employee']->id,
                     'position' => $row['employee']->position,
