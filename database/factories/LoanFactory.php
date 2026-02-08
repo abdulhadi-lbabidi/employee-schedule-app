@@ -19,14 +19,14 @@ class LoanFactory extends Factory
      */
     public function definition(): array
     {
-        $number = fake()->randomFloat(2,100,1000);
+        $number = fake()->randomFloat(2, 100, 1000);
         return [
-            'employee_id'=>Employee::all()->random()->id,
-            'admin_id'=>Admin::all()->random()->id,
-            'amount'=>$number,
-            'paid_amount'=>fake()->randomElement([$number/2, $number/3, $number/4, $number]),
-            'role'=>fake()->randomElement(['waiting', 'compoleted','partially']),
-            'date'=>Carbon::createFromDate(2026,1),
+            'employee_id' => Employee::all()->random()->id,
+            'admin_id' => Admin::all()->random()->id,
+            'amount' => $number,
+            'paid_amount' => fake()->randomElement([$number / 2, $number / 3, $number / 4, $number]),
+            'status' => fake()->randomElement(['waiting', 'approved', 'rejected', 'completed', 'partially']),
+            'date' => Carbon::createFromDate(2026, 1),
         ];
     }
 }
