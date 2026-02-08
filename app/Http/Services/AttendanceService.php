@@ -39,7 +39,7 @@ class AttendanceService
             ])
             ->defaultSort('-check_in')
             ->allowedSorts(['date', 'week_number', 'regular_hours'])
-            ->paginate(15);
+            ->get();
     }
 
 
