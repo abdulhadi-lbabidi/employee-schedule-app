@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Workshop;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -103,7 +104,23 @@ class AttendanceService
         })->filter(fn($row) => $row['workshop'] !== null)->values();
     }
 
-    
+
+    public function getEmployeeWorkshopsDetailedSummary($employeeId)
+    {
+        return Attendance::query()
+            ->where('employee_id', $employeeId)
+            ->join('workshops', 'attendances.workshop_id', '=', 'workshops.id')
+            ->select(
+                'workshops.id',
+                'workshops.name',
+                'workshops.location',
+                DB::raw('SUM(regular_hours) as total_regular_hours'),
+                DB::raw('SUM(overtime_hours) as total_overtime_hours')
+            )
+            ->groupBy('workshops.id', 'workshops.name', 'workshops.location')
+            ->get();
+    }
+
     public function getEmployeeTotalHours($employeeId)
     {
         $row = Attendance::query()

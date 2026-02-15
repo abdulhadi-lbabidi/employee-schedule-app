@@ -68,25 +68,41 @@ class AttendanceController extends Controller
         $user = $request->user();
         $isAdmin = $user->userable_type === 'Admin';
         $isOwn = $user->userable_type === 'Employee' && (int) $user->userable_id === (int) $employee->id;
-        if (!$isAdmin && !$isOwn) {
-            abort(403, 'غير مصرح لك بعرض بيانات هذا الموظف.');
-        }
+        if (!$isAdmin && !$isOwn)
+            abort(403, 'غير مصرح لك.');
 
-        $hours = $this->attendanceService->getEmployeeTotalHours($employee->id);
-        $totalRegularHours = $hours['total_regular_hours'];
-        $totalOvertimeHours = $hours['total_overtime_hours'];
+        $globalHours = $this->attendanceService->getEmployeeTotalHours($employee->id);
+        $workshopsData = $this->attendanceService->getEmployeeWorkshopsDetailedSummary($employee->id);
 
-        $regularPay = round($totalRegularHours * (float) $employee->hourly_rate, 2);
-        $overtimePay = round($totalOvertimeHours * (float) $employee->overtime_rate, 2);
-        $totalPay = round($regularPay + $overtimePay, 2);
+        $workshopsSummary = $workshopsData->map(function ($ws) use ($employee) {
+            $regPay = round($ws->total_regular_hours * $employee->hourly_rate, 2);
+            $ovPay = round($ws->total_overtime_hours * $employee->overtime_rate, 2);
+
+            return [
+                'workshop_id' => $ws->id,
+                'workshop_name' => $ws->name,
+                'location' => $ws->location,
+                'regular_hours' => (float) $ws->total_regular_hours,
+                'overtime_hours' => (float) $ws->total_overtime_hours,
+                'regular_pay' => $regPay,
+                'overtime_pay' => $ovPay,
+                'total_pay' => round($regPay + $ovPay, 2),
+            ];
+        });
+
+        $grandRegularPay = round($globalHours['total_regular_hours'] * $employee->hourly_rate, 2);
+        $grandOvertimePay = round($globalHours['total_overtime_hours'] * $employee->overtime_rate, 2);
 
         return response()->json([
             'employee' => new EmployeeResource($employee),
-            'total_regular_hours' => $totalRegularHours,
-            'total_overtime_hours' => $totalOvertimeHours,
-            'regular_pay' => $regularPay,
-            'overtime_pay' => $overtimePay,
-            'total_pay' => $totalPay,
+            'workshops_summary' => $workshopsSummary,
+            'grand_totals' => [
+                'total_regular_hours' => $globalHours['total_regular_hours'],
+                'total_overtime_hours' => $globalHours['total_overtime_hours'],
+                'total_regular_pay' => $grandRegularPay,
+                'total_overtime_pay' => $grandOvertimePay,
+                'grand_total_pay' => round($grandRegularPay + $grandOvertimePay, 2),
+            ]
         ]);
     }
 
