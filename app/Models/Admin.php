@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Admin extends Model
 {
 
-    use SoftDeletes;
-    /** @use HasFactory<\Database\Factories\AdminFactory> */
-    use HasFactory;
-    protected $fillable = [
-        'name',
-    ];
-    public function user()
-    {
-        return $this->morphOne(User::class, 'userable');
-    }
+  use SoftDeletes;
+  /** @use HasFactory<\Database\Factories\AdminFactory> */
+  use HasFactory;
+  protected $fillable = [
+    'name',
+  ];
+  public function user()
+  {
+    return $this->morphOne(User::class, 'userable');
+  }
 }

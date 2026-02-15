@@ -11,61 +11,61 @@ use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
-    public function __construct(
-        private EmployeeService $employeeService
-    ) {
-    }
-    public function index()
-    {
-        $employees = $this->employeeService->getAll();
-        return EmployeeResource::collection($employees);
-    }
+  public function __construct(
+    private EmployeeService $employeeService
+  ) {
+  }
+  public function index()
+  {
+    $employees = $this->employeeService->getAll();
+    return EmployeeResource::collection($employees);
+  }
 
-    public function archived()
-    {
-        $employee = $this->employeeService->getArchived();
-        return EmployeeResource::collection($employee);
-    }
-    public function store(CreateEmployeeRequest $request)
-    {
-        $employee = $this->employeeService->create($request->validated());
-        return new EmployeeResource($employee);
-    }
+  public function archived()
+  {
+    $employee = $this->employeeService->getArchived();
+    return EmployeeResource::collection($employee);
+  }
+  public function store(CreateEmployeeRequest $request)
+  {
+    $employee = $this->employeeService->create($request->validated());
+    return new EmployeeResource($employee);
+  }
 
-    public function show(Employee $employee)
-    {
-        return new EmployeeResource($employee->load('user'));
-    }
+  public function show(Employee $employee)
+  {
+    return new EmployeeResource($employee->load('user'));
+  }
 
 
-    public function update(UpdateEmployeeRequest $request, Employee $employee)
-    {
-        $employee = $this->employeeService->update($employee, $request->validated());
-        return new EmployeeResource($employee);
-    }
+  public function update(UpdateEmployeeRequest $request, Employee $employee)
+  {
+    $employee = $this->employeeService->update($employee, $request->validated());
+    return new EmployeeResource($employee);
+  }
 
-    public function destroy(Employee $employee)
-    {
-        $this->employeeService->delete($employee);
-        return response()->json([
-            'message' => 'Admin archived successfully'
-        ]);
-    }
+  public function destroy(Employee $employee)
+  {
+    $this->employeeService->delete($employee);
+    return response()->json([
+      'message' => 'Admin archived successfully'
+    ]);
+  }
 
-    public function restore($id)
-    {
-        $employee = Employee::onlyTrashed()->findOrFail($id);
-        $this->employeeService->restore($employee);
+  public function restore($id)
+  {
+    $employee = Employee::onlyTrashed()->findOrFail($id);
+    $this->employeeService->restore($employee);
 
-        return response()->json(['message' => 'Employee restored successfully']);
-    }
+    return response()->json(['message' => 'Employee restored successfully']);
+  }
 
-    public function forceDelete($id)
-    {
-        $employee = Employee::onlyTrashed()->findOrFail($id);
-        $this->employeeService->forceDelete($employee);
+  public function forceDelete($id)
+  {
+    $employee = Employee::onlyTrashed()->findOrFail($id);
+    $this->employeeService->forceDelete($employee);
 
-        return response()->json(['message' => 'Employee permanently deleted']);
-    }
+    return response()->json(['message' => 'Employee permanently deleted']);
+  }
 
 }

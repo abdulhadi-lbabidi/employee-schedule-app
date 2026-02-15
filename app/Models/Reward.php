@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reward extends Model
 {
-    /** @use HasFactory<\Database\Factories\RewardFactory> */
-    use HasFactory, SoftDeletes;
+  /** @use HasFactory<\Database\Factories\RewardFactory> */
+  use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'employee_id',
-        'admin_id',
-        'amount',
-        'reason',
-        'date_issued'
-    ];
-    public function employee()
-    {
-        return $this->belongsTo(Employee::class);
-    }
+  protected $fillable = [
+    'employee_id',
+    'admin_id',
+    'amount',
+    'reason',
+    'date_issued'
+  ];
+  public function employee()
+  {
+    return $this->belongsTo(Employee::class);
+  }
 }

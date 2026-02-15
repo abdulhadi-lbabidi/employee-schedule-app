@@ -6,99 +6,99 @@ use App\Models\Loan;
 
 class LoanService
 {
-    public function getAll()
-    {
-        $user = auth()->user();
+  public function getAll()
+  {
+    $user = auth()->user();
 
-        if ($user->userable_type === 'Employee') {
-            return Loan::where('employee_id', $user->userable_id)
-                ->with(['employee.user'])
-                ->get();
-        }
-
-        return Loan::with(['employee.user', 'admin'])->get();
+    if ($user->userable_type === 'Employee') {
+      return Loan::where('employee_id', $user->userable_id)
+        ->with(['employee.user'])
+        ->get();
     }
 
-    public function getArchived()
-    {
-        return Loan::onlyTrashed()->get();
+    return Loan::with(['employee.user', 'admin'])->get();
+  }
+
+  public function getArchived()
+  {
+    return Loan::onlyTrashed()->get();
+  }
+
+  public function create(array $data)
+  {
+
+    return Loan::create([
+      'employee_id' => auth()->user()->userable_id,
+      'amount' => $data['amount'],
+      'paid_amount' => 0,
+      'status' => 'waiting',
+      'date' => $data['date'],
+    ]);
+  }
+
+  public function update(Loan $loan, array $data)
+  {
+    $loan->update($data);
+    return $loan;
+  }
+
+  public function delete(Loan $loan)
+  {
+    return $loan->delete();
+  }
+
+  public function forceDelete(Loan $loan)
+  {
+    return $loan->forceDelete();
+  }
+
+  public function restore(Loan $loan)
+  {
+    return $loan->restore();
+  }
+
+  public function approve(Loan $loan)
+  {
+    if ($loan->status === 'completed') {
+      throw new \Exception("Cannot approve a completed loan.");
     }
 
-    public function create(array $data)
-    {
+    $loan->update([
+      'status' => 'approved',
+      'admin_id' => auth()->user()->userable_id,
+    ]);
+  }
 
-        return Loan::create([
-            'employee_id' => auth()->user()->userable_id,
-            'amount' => $data['amount'],
-            'paid_amount' => 0,
-            'status' => 'waiting',
-            'date' => $data['date'],
-        ]);
+  public function reject(Loan $loan)
+  {
+    if ($loan->status === 'completed') {
+      throw new \Exception("Cannot reject a completed loan.");
     }
 
-    public function update(Loan $loan, array $data)
-    {
-        $loan->update($data);
-        return $loan;
+    $loan->update([
+      'status' => 'rejected',
+      'admin_id' => auth()->user()->userable_id,
+    ]);
+  }
+
+  public function pay(Loan $loan, $amount)
+  {
+    if ($loan->status === 'rejected') {
+      throw new \Exception("Cannot pay a rejected loan.");
+    }
+    if ($loan->status === 'completed') {
+      throw new \Exception("Cannot pay a completed loan.");
     }
 
-    public function delete(Loan $loan)
-    {
-        return $loan->delete();
+    $loan->paid_amount += $amount;
+
+    if ($loan->paid_amount >= $loan->amount) {
+      $loan->status = 'completed';
+    } else {
+      $loan->status = 'partially';
     }
 
-    public function forceDelete(Loan $loan)
-    {
-        return $loan->forceDelete();
-    }
-
-    public function restore(Loan $loan)
-    {
-        return $loan->restore();
-    }
-
-    public function approve(Loan $loan)
-    {
-        if ($loan->status === 'completed') {
-            throw new \Exception("Cannot approve a completed loan.");
-        }
-
-        $loan->update([
-            'status' => 'approved',
-            'admin_id' => auth()->user()->userable_id,
-        ]);
-    }
-
-    public function reject(Loan $loan)
-    {
-        if ($loan->status === 'completed') {
-            throw new \Exception("Cannot reject a completed loan.");
-        }
-
-        $loan->update([
-            'status' => 'rejected',
-            'admin_id' => auth()->user()->userable_id,
-        ]);
-    }
-
-    public function pay(Loan $loan, $amount)
-    {
-        if ($loan->status === 'rejected') {
-            throw new \Exception("Cannot pay a rejected loan.");
-        }
-        if ($loan->status === 'completed') {
-            throw new \Exception("Cannot pay a completed loan.");
-        }
-
-        $loan->paid_amount += $amount;
-
-        if ($loan->paid_amount >= $loan->amount) {
-            $loan->status = 'completed';
-        } else {
-            $loan->status = 'partially';
-        }
-
-        $loan->save();
-    }
+    $loan->save();
+  }
 
 }
