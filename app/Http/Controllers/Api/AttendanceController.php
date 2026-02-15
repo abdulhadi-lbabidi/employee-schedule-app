@@ -66,6 +66,7 @@ class AttendanceController extends Controller
   }
 
 
+  // details employee
   public function employeeHoursAndPaySummary(Request $request, Employee $employee)
   {
     $user = $request->user();
@@ -109,9 +110,13 @@ class AttendanceController extends Controller
     ]);
   }
 
+  // details workshop
   public function workshopHoursByEmployee(Workshop $workshop)
   {
     $rows = $this->attendanceService->getWorkshopHoursByEmployee($workshop->id);
+
+    $grandTotalRegular = $rows->sum('total_regular_hours');
+    $grandTotalOvertime = $rows->sum('total_overtime_hours');
 
     return response()->json([
       'workshop' => new WorkshopResource($workshop),
@@ -124,14 +129,18 @@ class AttendanceController extends Controller
         ],
         'total_regular_hours' => $row['total_regular_hours'],
         'total_overtime_hours' => $row['total_overtime_hours'],
+        'total_combined_hours' => round($row['total_regular_hours'] + $row['total_overtime_hours'], 2),
       ]),
+      'workshop_totals' => [
+        'all_employees_regular_hours' => round($grandTotalRegular, 2),
+        'all_employees_overtime_hours' => round($grandTotalOvertime, 2),
+        'total_workshop_hours' => round($grandTotalRegular + $grandTotalOvertime, 2),
+        'employees_count' => $rows->count(),
+      ]
     ]);
   }
 
-  public function show(Attendance $attendance)
-  {
-    return new AttendanceResource($attendance->load(['employee', 'workshop']));
-  }
+
   public function sync(CreateAttendanceRequest $request)
   {
     $result = [];

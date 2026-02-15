@@ -107,6 +107,7 @@ class AttendanceService
   }
 
 
+  // details employee
   public function getEmployeeWorkshopsDetailedSummary($employeeId)
   {
     return Attendance::query()
@@ -136,6 +137,7 @@ class AttendanceService
     ];
   }
 
+  //details workshop
   public function getWorkshopHoursByEmployee($workshopId)
   {
     $aggregated = Attendance::query()
@@ -144,11 +146,12 @@ class AttendanceService
       ->groupBy('employee_id')
       ->get();
 
-    $employeeIds = $aggregated->pluck('employee_id')->unique()->filter()->values()->all();
-    $employees = Employee::query()->with('user')->whereIn('id', $employeeIds)->get()->keyBy('id');
+    $employeeIds = $aggregated->pluck('employee_id');
+    $employees = Employee::with('user')->whereIn('id', $employeeIds)->get()->keyBy('id');
 
     return $aggregated->map(function ($row) use ($employees) {
       $employee = $employees->get($row->employee_id);
+
       return [
         'employee' => $employee,
         'total_regular_hours' => round((float) $row->total_regular_hours, 2),

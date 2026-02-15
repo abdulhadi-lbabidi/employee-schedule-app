@@ -12,6 +12,7 @@ class LoanService
 
     if ($user->userable_type === 'Employee') {
       return Loan::where('employee_id', $user->userable_id)
+        ->where('status', '!=', 'rejected')
         ->with(['employee.user'])
         ->get();
     }
