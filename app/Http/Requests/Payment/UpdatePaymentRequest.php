@@ -23,9 +23,21 @@ class UpdatePaymentRequest extends FormRequest
   {
     return [
       'employee_id' => 'sometimes|exists:employees,id',
-      'admin_id' => 'sometimes|exists:admins,id',
       'total_amount' => 'sometimes|numeric|min:0',
-      'amount_paid' => 'sometimes|numeric|min:0',
+      'amount_paid' => [
+        'sometimes',
+        'numeric',
+        'min:0',
+        'lte:total_amount'
+      ],
+      'payment_date' => 'sometimes|date',
+    ];
+  }
+
+  public function messages(): array
+  {
+    return [
+      'amount_paid.lte' => 'cannot be greater than total amount',
     ];
   }
 }

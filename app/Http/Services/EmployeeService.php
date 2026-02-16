@@ -25,6 +25,44 @@ class EmployeeService
       ->get();
   }
 
+
+  public function getEmployeesDues()
+  {
+    $employeesCollection = Employee::with(['user'])
+      ->withSum('attendances as total_all_regular_hours', 'regular_hours')
+      ->withSum('attendances as total_all_overtime_hours', 'overtime_hours')
+      ->withSum('payments as total_paid_to_date', 'amount_paid')
+      ->get();
+
+    $details = $employeesCollection->map(function ($employee) {
+      $regHours = (double) ($employee->total_all_regular_hours ?? 0);
+      $overHours = (double) ($employee->total_all_overtime_hours ?? 0);
+
+      $totalEarned = ($regHours * $employee->hourly_rate) + ($overHours * $employee->overtime_rate);
+
+      $totalPaid = (double) ($employee->total_paid_to_date ?? 0);
+
+      $remainingDue = $totalEarned - $totalPaid;
+
+      return [
+        'id' => $employee->id,
+        'full_name' => $employee->user?->full_name,
+        'total_earned' => $totalEarned,
+        'total_paid' => $totalPaid,
+        'remaining_due' => $remainingDue,
+        'total_hours' => $regHours + $overHours
+      ];
+    });
+
+    return [
+      'employees' => $details->where('remaining_due', '>', 0)->values(),
+      'summary' => [
+        'total_employees_count' => $details->where('remaining_due', '>', 0)->count(),
+        'grand_total_debt' => $details->sum('remaining_due'),
+      ]
+    ];
+  }
+
   public function create(array $data)
   {
     $employee = Employee::create([

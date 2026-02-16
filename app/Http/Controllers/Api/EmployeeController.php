@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\CreateEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Http\Services\EmployeeService;
+use App\Http\Controllers\Controller;
 use App\Models\Employee;
 
 class EmployeeController extends Controller
@@ -26,6 +26,20 @@ class EmployeeController extends Controller
     $employee = $this->employeeService->getArchived();
     return EmployeeResource::collection($employee);
   }
+
+  public function duesReport()
+  {
+    $reportData = $this->employeeService->getEmployeesDues();
+
+    return response()->json([
+      'data' => [
+        'employees' => $reportData['employees']
+      ],
+      'summary' => $reportData['summary'],
+
+    ]);
+  }
+
   public function store(CreateEmployeeRequest $request)
   {
     $employee = $this->employeeService->create($request->validated());

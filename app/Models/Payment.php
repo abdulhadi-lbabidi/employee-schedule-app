@@ -21,6 +21,13 @@ class Payment extends Model
     'payment_date',
   ];
 
+  protected $casts = [
+    'payment_date' => 'datetime',
+    'is_paid' => 'boolean',
+    'total_amount' => 'double',
+    'amount_paid' => 'double',
+  ];
+
   public function employee()
   {
     return $this->belongsTo(Employee::class);

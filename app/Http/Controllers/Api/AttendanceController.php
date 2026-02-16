@@ -10,7 +10,6 @@ use App\Http\Services\AttendanceService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Workshop;
 

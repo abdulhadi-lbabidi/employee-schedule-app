@@ -27,7 +27,6 @@ class CreateAttendanceRequest extends FormRequest
       '*.date' => 'required|date',
       '*.check_in' => 'required|date_format:H:i:s',
       '*.check_out' => 'nullable|date_format:H:i:s',
-      // '*.week_number' => 'required|integer',
       '*.regular_hours' => 'required|numeric',
       '*.overtime_hours' => 'required|numeric',
       '*.note' => 'nullable|string',

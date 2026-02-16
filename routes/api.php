@@ -29,103 +29,109 @@ Route::apiResource('admins', AdminController::class);
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
+  Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
 
-    Route::get('me', [AuthController::class, 'me']);
-    Route::post('update-profile', [AuthController::class, 'updateProfile']);
+  Route::get('me', [AuthController::class, 'me']);
+  Route::post('update-profile', [AuthController::class, 'updateProfile']);
 
-    Route::get('workshops', [WorkshopController::class, 'index']);
-    Route::get('workshops/{workshop}', [WorkshopController::class, 'show']);
+  Route::get('workshops', [WorkshopController::class, 'index']);
+  Route::get('workshops/{workshop}', [WorkshopController::class, 'show']);
 
-    Route::get('my-attendance/{employeeId}', [AttendanceController::class, 'employeeHistory']);
-    Route::get('employees/{employee}/hours-by-workshop', [AttendanceController::class, 'hoursByWorkshop']);
-    Route::get('employees/{employee}/hours-and-pay-summary', [AttendanceController::class, 'employeeHoursAndPaySummary']);
-    Route::get('/attendance', [AttendanceController::class, 'index']);
+  Route::get('my-attendance/{employeeId}', [AttendanceController::class, 'employeeHistory']);
+  Route::get('employees/{employee}/hours-by-workshop', [AttendanceController::class, 'hoursByWorkshop']);
+  Route::get('employees/{employee}/hours-and-pay-summary', [AttendanceController::class, 'employeeHoursAndPaySummary']);
+  Route::get('/attendance', [AttendanceController::class, 'index']);
 
-    Route::get('loans', [LoanController::class, 'index']);
-    Route::get('loans/{loan}', [LoanController::class, 'show']);
-    Route::post('loans', [LoanController::class, 'store']);
+  Route::get('loans', [LoanController::class, 'index']);
+  Route::get('loans/{loan}', [LoanController::class, 'show']);
+  Route::post('loans', [LoanController::class, 'store']);
 
-    Route::get('rewards/{reward}', [RewardController::class, 'show']);
+  Route::get('rewards/{reward}', [RewardController::class, 'show']);
 
 
-    Route::post('/logout', [AuthController::class, 'logout']);
+  Route::post('/logout', [AuthController::class, 'logout']);
 
-    /*
-    |----------------------------------------------------------------------
-    |   (Admin Panel)
-    |----------------------------------------------------------------------
-    */
+  /*
+  |----------------------------------------------------------------------
+  |   (Admin Panel)
+  |----------------------------------------------------------------------
+  */
 
-    Route::middleware('role:admin')->group(function () {
-        Route::get('admins-archived', [AdminController::class, 'archived']);
-        Route::post('admins/{id}/restore', [AdminController::class, 'restore']);
-        Route::delete('admins/{id}/force-delete', [AdminController::class, 'forceDelete']);
+  Route::middleware('role:admin')->group(function () {
+    Route::get('admins-archived', [AdminController::class, 'archived']);
+    Route::post('admins/{id}/restore', [AdminController::class, 'restore']);
+    Route::delete('admins/{id}/force-delete', [AdminController::class, 'forceDelete']);
 
-        // employee
-        Route::apiResource('employees', EmployeeController::class);
-        Route::get('employees-archived', [EmployeeController::class, 'archived']);
-        Route::post('employees/{id}/restore', [EmployeeController::class, 'restore']);
-        Route::delete('employees/{id}/force-delete', [EmployeeController::class, 'forceDelete']);
+    // employee
+    Route::get('employees/dues-report', [EmployeeController::class, 'duesReport']);
+    Route::apiResource('employees', EmployeeController::class);
+    Route::get('employees-archived', [EmployeeController::class, 'archived']);
+    Route::post('employees/{id}/restore', [EmployeeController::class, 'restore']);
+    Route::delete('employees/{id}/force-delete', [EmployeeController::class, 'forceDelete']);
 
-        // workshop
-        Route::get('workshops/{workshop}/hours-by-employee', [AttendanceController::class, 'workshopHoursByEmployee']);
-        Route::post('workshops', [WorkshopController::class, 'store']);
-        Route::put('workshops/{workshop}', [WorkshopController::class, 'update']);
-        Route::delete('workshops/{workshop}', [WorkshopController::class, 'destroy']);
-        Route::get('workshops-archived', [WorkshopController::class, 'archived']);
-        Route::post('workshops/{id}/restore', [WorkshopController::class, 'restore']);
-        Route::delete('workshops/{id}/force-delete', [WorkshopController::class, 'forceDelete']);
 
-        Route::get('attendances', [AttendanceController::class, 'index']);
 
-        //loan
-        Route::get('loans-archived', [LoanController::class, 'archived']);
-        Route::post('loans/{id}/restore', [LoanController::class, 'restore']);
-        Route::delete('loans/{id}/force-delete', [LoanController::class, 'forceDelete']);
-        Route::delete('loans/{loan}', [LoanController::class, 'destroy']);
-        Route::post('loans/{loan}/approve', [LoanController::class, 'approve']);
-        Route::post('loans/{loan}/reject', [LoanController::class, 'reject']);
-        Route::post('loans/{loan}/pay', [LoanController::class, 'pay']);
+    // workshop
+    Route::get('workshops/{workshop}/hours-by-employee', [AttendanceController::class, 'workshopHoursByEmployee']);
+    Route::post('workshops', [WorkshopController::class, 'store']);
+    Route::put('workshops/{workshop}', [WorkshopController::class, 'update']);
+    Route::delete('workshops/{workshop}', [WorkshopController::class, 'destroy']);
+    Route::get('workshops-archived', [WorkshopController::class, 'archived']);
+    Route::post('workshops/{id}/restore', [WorkshopController::class, 'restore']);
+    Route::delete('workshops/{id}/force-delete', [WorkshopController::class, 'forceDelete']);
 
-        // payment
-        Route::apiResource('payments', PaymentController::class);
-        Route::get('payments-archived', [PaymentController::class, 'archived']);
-        Route::post('payments/{id}/restore', [PaymentController::class, 'restore']);
-        Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete']);
+    Route::get('attendances', [AttendanceController::class, 'index']);
 
-        // reward
-        // Route::apiResource('rewards', RewardController::class);
-        Route::get('rewards', [RewardController::class, 'index']);
-        Route::post('rewards', [RewardController::class, 'store']);
-        Route::put('rewards/{reward}', [RewardController::class, 'update']);
-        Route::delete('rewards/{reward}', [RewardController::class, 'destroy']);
-        Route::get('rewards-archived', [RewardController::class, 'archived']);
-        Route::post('rewards/{id}/restore', [RewardController::class, 'restore']);
-        Route::delete('rewards/{id}/force-delete', [RewardController::class, 'forceDelete']);
+    //loan
+    Route::get('loans-archived', [LoanController::class, 'archived']);
+    Route::post('loans/{id}/restore', [LoanController::class, 'restore']);
+    Route::delete('loans/{id}/force-delete', [LoanController::class, 'forceDelete']);
+    Route::delete('loans/{loan}', [LoanController::class, 'destroy']);
+    Route::post('loans/{loan}/approve', [LoanController::class, 'approve']);
+    Route::post('loans/{loan}/reject', [LoanController::class, 'reject']);
+    Route::post('loans/{loan}/pay', [LoanController::class, 'pay']);
 
-        Route::post('notifications/send', [NotificationController::class, 'send']);
+    // payment
+    Route::get('payments/unpaid-weeks/{employee}', [PaymentController::class, 'getUnpaidWeeks']);
+    Route::post('payments/pay-records', [PaymentController::class, 'payRecords']);
+    Route::apiResource('payments', PaymentController::class);
+    Route::apiResource('payments', PaymentController::class);
+    Route::get('payments-archived', [PaymentController::class, 'archived']);
+    Route::post('payments/{id}/restore', [PaymentController::class, 'restore']);
+    Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete']);
 
-        Route::apiResource('weekly-histories', WeeklyHistoryController::class)->only(['index', 'store']);
-        Route::post('weekly-histories/{weeklyHistory}/toggle-payment', [WeeklyHistoryController::class, 'togglePayment']);
+    // reward
+    // Route::apiResource('rewards', RewardController::class);
+    Route::get('rewards', [RewardController::class, 'index']);
+    Route::post('rewards', [RewardController::class, 'store']);
+    Route::put('rewards/{reward}', [RewardController::class, 'update']);
+    Route::delete('rewards/{reward}', [RewardController::class, 'destroy']);
+    Route::get('rewards-archived', [RewardController::class, 'archived']);
+    Route::post('rewards/{id}/restore', [RewardController::class, 'restore']);
+    Route::delete('rewards/{id}/force-delete', [RewardController::class, 'forceDelete']);
 
+    Route::post('notifications/send', [NotificationController::class, 'send']);
+
+    Route::apiResource('weekly-histories', WeeklyHistoryController::class)->only(['index', 'store']);
+    Route::post('weekly-histories/{weeklyHistory}/toggle-payment', [WeeklyHistoryController::class, 'togglePayment']);
+
+  });
+
+  /*
+  |----------------------------------------------------------------------
+  |   (Employee Panel)
+  |----------------------------------------------------------------------
+  */
+  Route::middleware('role:employee')->group(function () {
+    Route::prefix('attendances')->group(function () {
+      Route::post('check-in', [AttendanceController::class, 'checkIn']);
+      Route::post('check-out/{employee}', [AttendanceController::class, 'checkOut']);
+      // offline
+      Route::post('sync', [AttendanceController::class, 'sync']);
     });
+    Route::put('loans/{loan}', [LoanController::class, 'update']);
 
-    /*
-    |----------------------------------------------------------------------
-    |   (Employee Panel)
-    |----------------------------------------------------------------------
-    */
-    Route::middleware('role:employee')->group(function () {
-        Route::prefix('attendances')->group(function () {
-            Route::post('check-in', [AttendanceController::class, 'checkIn']);
-            Route::post('check-out/{employee}', [AttendanceController::class, 'checkOut']);
-            // offline
-            Route::post('sync', [AttendanceController::class, 'sync']);
-        });
-        Route::put('loans/{loan}', [LoanController::class, 'update']);
-
-    });
+  });
 
 
 });

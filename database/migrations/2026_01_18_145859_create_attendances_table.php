@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Employee;
+use App\Models\Payment;
 use App\Models\Workshop;
 
 return new class extends Migration {
@@ -23,6 +24,10 @@ return new class extends Migration {
       $table->text('note')->nullable();
       $table->double('regular_hours')->default(0);
       $table->double('overtime_hours')->default(0);
+      $table->foreignIdFor(Payment::class)
+        ->nullable()
+        ->constrained()
+        ->onDelete('set null');
       $table->enum('status', ['مؤرشف', 'قيد الرفع']);
       $table->timestamps();
     });

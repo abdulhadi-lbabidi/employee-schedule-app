@@ -7,6 +7,7 @@ use App\Http\Requests\Payment\CreatePaymentRequest;
 use App\Http\Requests\Payment\UpdatePaymentRequest;
 use App\Http\Resources\PaymentResource;
 use App\Http\Services\PaymentService;
+use App\Models\Employee;
 use App\Models\Payment;
 
 class PaymentController extends Controller
@@ -27,11 +28,30 @@ class PaymentController extends Controller
     $payments = $this->paymentService->getArchived();
     return PaymentResource::collection($payments);
   }
-  public function store(CreatePaymentRequest $request)
+
+
+  public function duesReport()
   {
-    $payment = $this->paymentService->create($request->validated());
-    return new PaymentResource($payment);
+    $reportData = $this->employeeService->getEmployeesDues();
+
+    return response()->json([
+      'summary' => $reportData['stats'],
+      'details' => EmployeeDueResource::collection($reportData['employees'])
+    ]);
   }
+
+  public function getUnpaidWeeks(Employee $employee)
+  {
+    $data = $this->paymentService->getUnpaidWeeks($employee);
+    return response()->json($data);
+  }
+
+  public function payRecords(CreatePaymentRequest $request)
+  {
+    return $this->paymentService->paySelectedRecords($request);
+  }
+
+
 
   public function show(Payment $payment)
   {
