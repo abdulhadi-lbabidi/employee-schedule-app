@@ -13,21 +13,20 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PaymentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
-    {
-        return [
-            'employee_id'=>Employee::all()->random()->id,
-            'admin_id'=>Admin::all()->random()->id,
-            'week_number'=>fake()->numberBetween(1,5),
-            'total_amount'=>fake()->randomFloat(2,0.5,1),
-            'amount_paid'=>fake()->randomFloat(2,0.5,1),
-            'is_paid'=>fake()->boolean(20),
-            'payment_date'=>Carbon::createFromDate(2026,1),
-        ];
-    }
+  /**
+   * Define the model's default state.
+   *
+   * @return array<string, mixed>
+   */
+  public function definition(): array
+  {
+    return [
+      'employee_id' => Employee::all()->random()->id,
+      'admin_id' => Admin::all()->random()->id,
+      'total_amount' => fake()->randomFloat(2, 0.5, 1),
+      'amount_paid' => fake()->randomFloat(2, 0.5, 1),
+      'is_paid' => fake()->boolean(20),
+      'payment_date' => Carbon::createFromDate(2026, 1),
+    ];
+  }
 }
