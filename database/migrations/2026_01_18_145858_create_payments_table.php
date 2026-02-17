@@ -17,8 +17,8 @@ return new class extends Migration {
       $table->id();
       $table->foreignIdFor(Employee::class);
       $table->foreignIdFor(Admin::class);
-      $table->double('total_amount');
-      $table->double('amount_paid');
+      $table->decimal('total_amount', 8, 2);
+      $table->decimal('amount_paid', 8, 2);
       $table->boolean('is_paid');
       $table->timestamp('payment_date');
       $table->softDeletes();

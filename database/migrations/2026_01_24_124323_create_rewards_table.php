@@ -16,7 +16,7 @@ return new class extends Migration {
       $table->id();
       $table->foreignIdFor(Employee::class)->constrained();
       $table->foreignIdFor(Admin::class)->constrained();
-      $table->integer('amount');
+      $table->decimal('amount', 8, 2);
       $table->string('reason');
       $table->date('date_issued');
       $table->softDeletes();

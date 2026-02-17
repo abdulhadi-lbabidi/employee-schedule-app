@@ -19,7 +19,7 @@ return new class extends Migration {
       $table->integer('week_number');
       $table->integer('month');
       $table->integer('year');
-      $table->integer('amount_paid');
+      $table->decimal('amount_paid');
       $table->Boolean('is_paid');
       $table->timestamps();
     });

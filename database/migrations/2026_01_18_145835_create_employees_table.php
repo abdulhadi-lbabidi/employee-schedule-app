@@ -14,8 +14,8 @@ return new class extends Migration {
       $table->id();
       $table->string('position');
       $table->string('department');
-      $table->double('hourly_rate');
-      $table->double('overtime_rate');
+      $table->decimal('hourly_rate', 8, 2);
+      $table->decimal('overtime_rate', 8, 2);
       $table->boolean('is_online')->default(false);
       $table->string('current_location');
       $table->softDeletes();

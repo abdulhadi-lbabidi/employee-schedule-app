@@ -17,6 +17,7 @@ class NotificationController extends Controller
   ) {
   }
 
+
   public function send(Request $request)
   {
     $request->validate([
@@ -30,7 +31,7 @@ class NotificationController extends Controller
 
     if ($request->filled('user_id')) {
       $user = User::find($request->user_id);
-      if ($user->fcm_token) {
+      if ($user && $user->fcm_token) {
         $tokens = [$user->fcm_token];
       }
     } elseif ($request->filled('workshop_id')) {
@@ -39,6 +40,8 @@ class NotificationController extends Controller
           $w->where('workshops.id', $request->workshop_id);
         });
       })->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+    } else {
+      $tokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
     }
 
     if (empty($tokens)) {
