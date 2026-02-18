@@ -166,7 +166,7 @@ class AttendanceService
   {
     $date = Carbon::parse($data['date']);
 
-    $data['week_number'] = $date->weekOfYear;
+    $data['week_number'] = $date->weekOfMonth;
 
     $employee = Employee::findOrFail($data['employee_id']);
 
