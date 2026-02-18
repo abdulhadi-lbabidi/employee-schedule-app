@@ -168,11 +168,18 @@ class AttendanceService
 
     $data['week_number'] = $date->weekOfYear;
 
+    $employee = Employee::findOrFail($data['employee_id']);
+
     $data['check_in'] = Carbon::parse($data['check_in'])->toDateTimeString();
 
     if (isset($data['check_out'])) {
       $data['check_out'] = Carbon::parse($data['check_out'])->toDateTimeString();
     }
+
+    $regularCost = ($data['regular_hours'] ?? 0) * $employee->hourly_rate;
+    $overtimeCost = ($data['overtime_hours'] ?? 0) * $employee->overtime_rate;
+
+    $data['estimated_amount'] = $regularCost + $overtimeCost;
 
     return Attendance::updateOrCreate(
       [

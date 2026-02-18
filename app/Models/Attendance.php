@@ -20,6 +20,7 @@ class Attendance extends Model
     'note',
     'regular_hours',
     'overtime_hours',
+    'estimated_amount',
   ];
 
   protected $casts = [

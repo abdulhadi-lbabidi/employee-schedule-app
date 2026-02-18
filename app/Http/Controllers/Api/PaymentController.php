@@ -30,16 +30,6 @@ class PaymentController extends Controller
   }
 
 
-  public function duesReport()
-  {
-    $reportData = $this->employeeService->getEmployeesDues();
-
-    return response()->json([
-      'summary' => $reportData['stats'],
-      'details' => EmployeeDueResource::collection($reportData['employees'])
-    ]);
-  }
-
   public function getUnpaidWeeks(Employee $employee)
   {
     $data = $this->paymentService->getUnpaidWeeks($employee);

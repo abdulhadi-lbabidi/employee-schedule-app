@@ -31,24 +31,25 @@ class PaymentService
   public function getUnpaidWeeks(Employee $employee)
   {
     $records = Attendance::where('employee_id', $employee->id)
-      ->whereNull('payment_id')
+      ->whereRaw('paid_amount < estimated_amount')
       ->orderBy('date', 'asc')
       ->get();
 
     return $records->groupBy(function ($item) {
       $date = Carbon::parse($item->date);
-      $start = $date->copy()->startOfWeek(Carbon::SATURDAY)->format('Y-m-d');
-      $end = $date->copy()->endOfWeek(Carbon::FRIDAY)->format('Y-m-d');
+      $start = $date->startOfWeek(Carbon::SATURDAY)->format('Y-m-d');
+      $end = $date->endOfWeek(Carbon::FRIDAY)->format('Y-m-d');
       return $start . " إلى " . $end;
-    })->map(function ($weekRecords, $range) use ($employee) {
-      $regHours = $weekRecords->sum('regular_hours');
-      $ovtHours = $weekRecords->sum('overtime_hours');
+    })->map(function ($weekRecords, $range) {
+      $remainingAmount = $weekRecords->sum(function ($record) {
+        return $record->estimated_amount - $record->paid_amount;
+      });
 
       return [
         'week_range' => $range,
-        'total_regular_hours' => $regHours,
-        'total_overtime_hours' => $ovtHours,
-        'estimated_amount' => ($regHours * $employee->hourly_rate) + ($ovtHours * $employee->overtime_rate),
+        'total_regular_hours' => $weekRecords->sum('regular_hours'),
+        'total_overtime_hours' => $weekRecords->sum('overtime_hours'),
+        'estimated_amount' => $remainingAmount,
         'days_count' => $weekRecords->count(),
         'ids' => $weekRecords->pluck('id'),
       ];
@@ -59,14 +60,15 @@ class PaymentService
   public function paySelectedRecords(Request $request)
   {
     return DB::transaction(function () use ($request) {
-
       $attendances = Attendance::whereIn('id', $request->attendance_ids)
-        ->whereNull('payment_id')
+        ->whereRaw('paid_amount < estimated_amount')
+        ->orderBy('date', 'asc')
         ->get();
 
       if ($attendances->isEmpty()) {
-        return response()->json(['message' => 'there is no records to be paid.'], 400);
+        return response()->json(['message' => 'There are no records to pay'], 400);
       }
+
 
       $payment = Payment::create([
         'employee_id' => $request->employee_id,
@@ -77,13 +79,25 @@ class PaymentService
         'is_paid' => true
       ]);
 
-      Attendance::whereIn('id', $attendances->pluck('id'))
-        ->update([
-          'payment_id' => $payment->id,
-          'status' => 'مؤرشف'
-        ]);
+      $amountToDistribute = $request->amount_paid;
 
-      return response()->json(['message' => 'Payment paid successfully']);
+      foreach ($attendances as $attendance) {
+        if ($amountToDistribute <= 0)
+          break;
+
+        $remainingOnRecord = $attendance->estimated_amount - $attendance->paid_amount;
+
+        if ($amountToDistribute >= $remainingOnRecord) {
+          $amountToDistribute -= $remainingOnRecord;
+          $attendance->paid_amount = $attendance->estimated_amount;
+        } else {
+          $attendance->paid_amount += $amountToDistribute;
+          $amountToDistribute = 0;
+        }
+        $attendance->save();
+      }
+
+      return response()->json(['message' => 'Payment paid successfully'], 200);
     });
   }
 
