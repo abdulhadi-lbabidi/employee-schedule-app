@@ -34,4 +34,5 @@ class FcmService
       'errors' => array_map(fn($f) => $f->error()->getMessage(), $report->failures()->getItems()),
     ];
   }
+
 }

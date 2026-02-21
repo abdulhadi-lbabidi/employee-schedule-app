@@ -124,8 +124,10 @@ Route::middleware('auth:sanctum')->group(function () {
   */
   Route::middleware('role:employee')->group(function () {
     Route::prefix('attendances')->group(function () {
-      Route::post('check-in', [AttendanceController::class, 'checkIn']);
-      Route::post('check-out/{employee}', [AttendanceController::class, 'checkOut']);
+
+      Route::post('/user-check-in', [NotificationController::class, 'userCheckIn']);
+      Route::post('/user-check-out', [NotificationController::class, 'userCheckOut']);
+
       // offline
       Route::post('sync', [AttendanceController::class, 'sync']);
     });
