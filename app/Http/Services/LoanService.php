@@ -76,10 +76,7 @@ class LoanService
       throw new \Exception("Cannot reject a completed loan.");
     }
 
-    $loan->update([
-      'status' => 'rejected',
-      'admin_id' => auth()->user()->userable_id,
-    ]);
+    return $loan->forceDelete();
   }
 
   public function pay(Loan $loan, $amount)
