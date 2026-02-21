@@ -12,4 +12,11 @@ class DashboardController extends Controller
     private DashboardService $dashboardService
   ) {
   }
+
+
+  public function index()
+  {
+    $stats = $this->dashboardService->statistics();
+    return response()->json($stats);
+  }
 }

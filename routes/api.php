@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LoanController;
 use App\Http\Controllers\Api\NotificationController;
@@ -58,6 +59,9 @@ Route::middleware('auth:sanctum')->group(function () {
   */
 
   Route::middleware('role:admin')->group(function () {
+
+    Route::get('/dashboard/statistics', [DashboardController::class, 'index']);
+
     Route::get('admins-archived', [AdminController::class, 'archived']);
     Route::post('admins/{id}/restore', [AdminController::class, 'restore']);
     Route::delete('admins/{id}/force-delete', [AdminController::class, 'forceDelete']);
