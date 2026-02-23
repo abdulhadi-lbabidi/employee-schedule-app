@@ -20,7 +20,8 @@ class PaymentResource extends JsonResource
       'admin_name' => $this->admin?->name,
       'total_amount' => $this->total_amount,
       'amount_paid' => $this->amount_paid,
-      'remaining_amount' => $this->total_amount - $this->amount_paid,
+      'remaining_amount' => round($this->total_amount - $this->amount_paid, 2),
+
       'status' => $this->is_paid ? 'Paid' : 'Pending',
       'payment_date' => $this->payment_date?->format('Y-m-d H:i'),
     ];

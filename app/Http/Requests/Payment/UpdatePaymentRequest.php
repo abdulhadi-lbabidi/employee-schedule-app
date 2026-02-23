@@ -28,16 +28,15 @@ class UpdatePaymentRequest extends FormRequest
         'sometimes',
         'numeric',
         'min:0',
-        'lte:total_amount'
+        function ($attribute, $value, $fail) {
+          $totalAmount = $this->input('total_amount') ?? $this->route('payment')->total_amount;
+
+          if (round($value, 2) > round($totalAmount, 2)) {
+            $fail('The paid amount cannot be greater than the total amount (' . $totalAmount . ').');
+          }
+        },
       ],
       'payment_date' => 'sometimes|date',
-    ];
-  }
-
-  public function messages(): array
-  {
-    return [
-      'amount_paid.lte' => 'cannot be greater than total amount',
     ];
   }
 }

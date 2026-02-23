@@ -25,9 +25,6 @@ class PaymentService
       ->get();
   }
 
-
-
-
   public function getUnpaidWeeks(Employee $employee)
   {
     $records = Attendance::where('employee_id', $employee->id)
@@ -60,7 +57,9 @@ class PaymentService
   public function paySelectedRecords(Request $request)
   {
     return DB::transaction(function () use ($request) {
+
       $attendances = Attendance::whereIn('id', $request->attendance_ids)
+        ->where('employee_id', $request->employee_id)
         ->whereRaw('paid_amount < estimated_amount')
         ->orderBy('date', 'asc')
         ->get();
@@ -70,13 +69,24 @@ class PaymentService
       }
 
 
+      $actualTotalRequired = $attendances->sum(function ($item) {
+        return $item->estimated_amount - $item->paid_amount;
+      });
+
+      if (round($request->amount_paid, 2) > round($actualTotalRequired, 2)) {
+        return response()->json([
+          'message' => "The paid amount ({$request->amount_paid}) exceeds the total required amount ({$actualTotalRequired}) for the selected records."
+        ], 422);
+      }
+
+
       $payment = Payment::create([
         'employee_id' => $request->employee_id,
         'admin_id' => auth()->id(),
-        'total_amount' => $request->total_amount,
+        'total_amount' => $actualTotalRequired,
         'amount_paid' => $request->amount_paid,
         'payment_date' => $request->payment_date,
-        'is_paid' => true
+        'is_paid' => round($request->amount_paid, 2) >= round($actualTotalRequired, 2),
       ]);
 
       $amountToDistribute = $request->amount_paid;
@@ -105,7 +115,7 @@ class PaymentService
 
   public function update(Payment $payment, array $data)
   {
-    $finalTotal = $data['total_amount'] ?? $payment->total_amount;
+    $finalTotal = $payment->total_amount;
 
     if (isset($data['amount_paid'])) {
       $newAmountPaid = $payment->amount_paid + $data['amount_paid'];
@@ -126,6 +136,32 @@ class PaymentService
     $payment->save();
     return $payment;
   }
+
+
+  public function updateValue(Payment $payment, array $data)
+  {
+    $finalTotal = $payment->total_amount;
+
+    if (isset($data['amount_paid'])) {
+      $newAmountPaid = $data['amount_paid'];
+
+      if ($newAmountPaid > $finalTotal) {
+        throw new \Exception("Error: The total paid amount ({$newAmountPaid}) cannot exceed the required total ({$finalTotal}).");
+      }
+
+      $data['amount_paid'] = $newAmountPaid;
+    }
+
+    $payment->fill($data);
+
+    if (isset($data['amount_paid'])) {
+      $payment->is_paid = $payment->amount_paid >= $finalTotal;
+    }
+
+    $payment->save();
+    return $payment;
+  }
+
   public function delete(Payment $payment)
   {
     return $payment->delete();

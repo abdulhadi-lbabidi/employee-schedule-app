@@ -36,7 +36,7 @@ class CreatePaymentRequest extends FormRequest
         },
       ],
 
-      'total_amount' => 'required|numeric|min:0',
+      // 'total_amount' => 'required|numeric|min:0',
       'amount_paid' => 'required|numeric|min:0',
 
       'payment_date' => 'required|date',
