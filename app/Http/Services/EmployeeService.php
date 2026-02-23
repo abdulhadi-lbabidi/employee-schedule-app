@@ -38,11 +38,10 @@ class EmployeeService
       $regHours = (double) ($employee->total_all_regular_hours ?? 0);
       $overHours = (double) ($employee->total_all_overtime_hours ?? 0);
 
-      $totalEarned = ($regHours * $employee->hourly_rate) + ($overHours * $employee->overtime_rate);
+      $totalEarned = round(($regHours * $employee->hourly_rate) + ($overHours * $employee->overtime_rate), 2);
+      $totalPaid = round((double) ($employee->total_paid_to_date ?? 0), 2);
 
-      $totalPaid = (double) ($employee->total_paid_to_date ?? 0);
-
-      $remainingDue = $totalEarned - $totalPaid;
+      $remainingDue = round($totalEarned - $totalPaid, 2);
 
       return [
         'id' => $employee->id,
@@ -50,15 +49,17 @@ class EmployeeService
         'total_earned' => $totalEarned,
         'total_paid' => $totalPaid,
         'remaining_due' => $remainingDue,
-        'total_hours' => $regHours + $overHours
+        'total_hours' => round($regHours + $overHours, 2)
       ];
     });
 
+    $debtors = $details->filter(fn($e) => $e['remaining_due'] > 0)->values();
+
     return [
-      'employees' => $details->where('remaining_due', '>', 0)->values(),
+      'employees' => $debtors,
       'summary' => [
-        'total_employees_count' => $details->where('remaining_due', '>', 0)->count(),
-        'grand_total_debt' => $details->sum('remaining_due'),
+        'total_employees_count' => $debtors->count(),
+        'grand_total_debt' => round($debtors->sum('remaining_due'), 2),
       ]
     ];
   }
