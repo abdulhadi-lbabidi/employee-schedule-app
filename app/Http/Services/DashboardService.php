@@ -46,11 +46,14 @@ class DashboardService
         'count' => $monthlyLoansCount,
         'total_amount' => round($totalLoansAmount, 2),
       ],
-      'attendance_earnings' => [
-        'total_estimated_amount' => round($totalEstimatedAttendance, 2),
-        'regular_hours' => Attendance::whereBetween('date', [$startOfMonth, $endOfMonth])->sum('regular_hours'),
-        'overtime_hours' => Attendance::whereBetween('date', [$startOfMonth, $endOfMonth])->sum('overtime_hours'),
-      ]
+      'attendance_earnings' =>
+        [
+          'total_estimated_amount' => round($totalEstimatedAttendance, 2),
+          'regular_hours' =>
+            round(Attendance::whereBetween('date', [$startOfMonth, $endOfMonth])->sum('regular_hours'), 2),
+          'overtime_hours' =>
+            round(Attendance::whereBetween('date', [$startOfMonth, $endOfMonth])->sum('overtime_hours'), 2),
+        ]
     ];
   }
 }
