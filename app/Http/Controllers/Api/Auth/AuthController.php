@@ -10,69 +10,78 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function __construct(
-        private AuthService $authService
-    ) {}
+  public function __construct(
+    private AuthService $authService
+  ) {
+  }
 
-    public function login(LoginRequest $request)
-    {
-        $result = $this->authService->loginUser($request->validated());
+  public function login(LoginRequest $request)
+  {
 
-        if (!$result) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
+    $fcmToken = $request->header('fcm-token');
 
-        return response()->json([
-            "token" => $result['token'],
-            "user" => $result['user'],
-            'status' => 200,
-            'role' => $result['role']
-        ]);
-    }
-    public function me()
-    {
-        $user = Auth::user();
 
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
+    $result = $this->authService->loginUser(array_merge(
+      $request->validated(),
+      ['fcm_token' => $fcmToken]
+    ));
 
-        $user->load('userable');
-
-        $role = ($user->userable_type === 'Admin') ? 'admin' : 'employee';
-
-        return response()->json([
-            'user' => $user,
-            'role' => $role,
-            'status' => 200
-        ], 200);
+    if (!$result) {
+      return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-    public function updateProfile(UpdateProfileRequest $request)
-    {
-        $user = $this->authService->updateProfile(
-            Auth::user(),
-            $request->validated()
-        );
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'user' => $user,
-            'status' => 200
-        ]);
+    return response()->json([
+      "token" => $result['token'],
+      "user" => $result['user'],
+      'status' => 200,
+      'role' => $result['role']
+    ]);
+  }
+  public function me()
+  {
+    $user = Auth::user();
+
+    if (!$user) {
+      return response()->json(['message' => 'User not found'], 404);
     }
 
+    $user->load('userable');
 
-    public function logout()
-    {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
-        $user->currentAccessToken()->delete();
+    $role = ($user->userable_type === 'Admin') ? 'admin' : 'employee';
 
-        return response()->json([
-            'message' => 'Logged out successfully',
-            'status' => 200
-        ]);
+    return response()->json([
+      'user' => $user,
+      'role' => $role,
+      'status' => 200
+    ], 200);
+  }
+
+  public function updateProfile(UpdateProfileRequest $request)
+  {
+    $user = $this->authService->updateProfile(
+      Auth::user(),
+      $request->validated()
+    );
+    return response()->json([
+      'message' => 'Profile updated successfully',
+      'user' => $user,
+      'status' => 200
+    ]);
+  }
+
+
+  public function logout()
+  {
+    $user = Auth::user();
+    if (!$user) {
+      return response()->json(['message' => 'Unauthenticated'], 401);
     }
+    $user->currentAccessToken()->delete();
+    $user->update(['fcm_token' => null]);
+
+    return response()->json([
+      'message' => 'Logged out successfully',
+      'status' => 200
+    ]);
+  }
 }

@@ -22,9 +22,13 @@ class FcmService
   {
     $notification = Notification::create($title, $body);
 
+    $payload = [
+      'args' => json_encode($data)
+    ];
+
     $message = CloudMessage::new()
       ->withNotification($notification)
-      ->withData($data);
+      ->withData($payload);
 
     $report = $this->messaging->sendMulticast($message, $tokens);
 

@@ -16,6 +16,12 @@ class AuthService
       return null;
     }
 
+    if (isset($data['fcm_token']) && $data['fcm_token']) {
+      $user->update([
+        'fcm_token' => $data['fcm_token']
+      ]);
+    }
+
     $user->tokens()->delete();
 
     $role = ($user->userable_type === 'Admin') ? 'admin' : 'employee';
