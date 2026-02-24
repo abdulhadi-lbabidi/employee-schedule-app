@@ -22,8 +22,6 @@ class AuthService
       ]);
     }
 
-    $user->tokens()->delete();
-
     $role = ($user->userable_type === 'Admin') ? 'admin' : 'employee';
 
     $token = $user->createToken('auth_token', [$role])->plainTextToken;
