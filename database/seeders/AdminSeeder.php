@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class AdminSeeder extends Seeder
@@ -22,12 +21,23 @@ class AdminSeeder extends Seeder
           'email' => 'abdulrahmannouh@nouh-agency.com',
           'password' => bcrypt('12345678'),
         ]);
+
+    Admin::factory()->create([
+      'name' => 'Admin G',
+    ])->user()->create([
+          'full_name' => 'Admin Mo',
+          'phone_number' => '0932893379',
+          'profile_image_url' => null,
+          'email' => 'admin@gmail.com',
+          'password' => bcrypt('password'),
+        ]);
+
     // Admin::factory()->create([
     //     'name' => 'Ahmed Shahrour',
     // ])->user()->create([
     //     'full_name' => 'Ahmed Shahrour',
     //     'phone_number'=>'0932893379',
-    //     'profile_image_url'=>null,s
+    //     'profile_image_url'=>null,
     //     'email'=>'ahmadshahrour@nouh-agency.com',
     //     'password'=>bcrypt('12345678'),
     // ]);

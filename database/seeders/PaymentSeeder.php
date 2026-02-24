@@ -14,7 +14,6 @@ class PaymentSeeder extends Seeder
    */
   public function run(): void
   {
-    // Payment::factory()->count(30)->create();
     Employee::all()->each(function ($employee) {
       Payment::factory()->create([
         'employee_id' => $employee->id,
