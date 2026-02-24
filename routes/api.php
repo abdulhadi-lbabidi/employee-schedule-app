@@ -53,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
   Route::post('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
 
+  Route::post('/notifications/user-check-in', [NotificationController::class, 'userCheckIn']);
+  Route::post('/notifications/user-check-out', [NotificationController::class, 'userCheckOut']);
+
   Route::post('/logout', [AuthController::class, 'logout']);
 
   /*
@@ -132,8 +135,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::middleware('role:employee')->group(function () {
     Route::prefix('attendances')->group(function () {
 
-      Route::post('/user-check-in', [NotificationController::class, 'userCheckIn']);
-      Route::post('/user-check-out', [NotificationController::class, 'userCheckOut']);
+
 
       // offline
       Route::post('sync', [AttendanceController::class, 'sync']);
