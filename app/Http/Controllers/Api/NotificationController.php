@@ -28,7 +28,6 @@ class NotificationController extends Controller
       ->get();
 
     return response()->json([
-      'status' => 200,
       'data' => $notifications
     ]);
   }
@@ -39,7 +38,6 @@ class NotificationController extends Controller
     $notification->update(['read_at' => now()]);
 
     return response()->json([
-      'status' => 200,
       'message' => 'Notification marked as read'
     ]);
   }
@@ -51,7 +49,6 @@ class NotificationController extends Controller
       ->update(['read_at' => now()]);
 
     return response()->json([
-      'status' => 200,
       'message' => 'All notifications marked as read'
     ]);
   }

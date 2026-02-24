@@ -31,7 +31,6 @@ Route::apiResource('admins', AdminController::class);
 */
 Route::middleware('auth:sanctum')->group(function () {
 
-  // Route::post('update-fcm-token', [UserController::class, 'updateFcmToken']);
 
   Route::get('me', [AuthController::class, 'me']);
   Route::post('update-profile', [AuthController::class, 'updateProfile']);
@@ -50,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
   Route::get('rewards/{reward}', [RewardController::class, 'show']);
 
-  Route::get('notifications', [NotificationController::class, 'getNotifications']);
+  Route::get('notifications', [NotificationController::class, 'getUnreadNotifications']);
   Route::post('notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
   Route::post('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
 
