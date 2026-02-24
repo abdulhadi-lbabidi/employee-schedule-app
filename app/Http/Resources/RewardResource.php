@@ -19,7 +19,7 @@ class RewardResource extends JsonResource
       'amount' => $this->amount,
       'reason' => $this->reason,
       'date_issued' => $this->date_issued,
-      'employee' => new EmployeeResource($this->whenLoaded('employee')),
+      'employee_name' => $this->employee?->user?->full_name,
       'admin_name' => $this->admin?->name,
       'created_at' => $this->created_at->format('Y-m-d'),
     ];

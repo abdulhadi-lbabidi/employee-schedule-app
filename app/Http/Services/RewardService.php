@@ -8,7 +8,8 @@ class RewardService
 {
   public function getAll()
   {
-    return Reward::whereNull('deleted_at')
+    return Reward::with('employee', 'admin')
+      ->whereNull('deleted_at')
       ->get();
   }
 

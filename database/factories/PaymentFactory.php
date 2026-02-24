@@ -20,19 +20,26 @@ class PaymentFactory extends Factory
    */
   public function definition(): array
   {
-    $totalAmount = fake()->randomFloat(2, 100, 1000);
+    $employee = Employee::inRandomOrder()->first() ?? Employee::factory();
 
-    $amountPaid = fake()->randomFloat(2, 50, $totalAmount);
+    $regHours = $employee->attendances()->sum('regular_hours');
+    $overHours = $employee->attendances()->sum('overtime_hours');
 
-    $isPaid = $amountPaid >= $totalAmount;
+    $totalEarned =
+      ($regHours * $employee->hourly_rate) +
+      ($overHours * $employee->overtime_rate);
+
+    $totalEarned = max($totalEarned, 0);
+
+    $amountPaid = fake()->randomFloat(2, 0, $totalEarned);
 
     return [
-      'employee_id' => Employee::inRandomOrder()->first()->id ?? Employee::factory(),
+      'employee_id' => $employee->id,
       'admin_id' => Admin::inRandomOrder()->first()->id ?? Admin::factory(),
-      'total_amount' => $totalAmount,
+      'total_amount' => $totalEarned,
       'amount_paid' => $amountPaid,
-      'is_paid' => $isPaid,
-      'payment_date' => Carbon::now()->subDays(rand(1, 30)),
+      'is_paid' => $amountPaid >= $totalEarned,
+      'payment_date' => now()->subDays(rand(1, 30)),
     ];
   }
 }

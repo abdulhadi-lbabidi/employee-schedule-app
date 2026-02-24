@@ -22,4 +22,9 @@ class Reward extends Model
   {
     return $this->belongsTo(Employee::class);
   }
+
+  public function admin()
+  {
+    return $this->belongsTo(Admin::class);
+  }
 }
