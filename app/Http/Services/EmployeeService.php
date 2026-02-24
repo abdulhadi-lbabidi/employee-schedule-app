@@ -28,11 +28,13 @@ class EmployeeService
 
   public function getEmployeesDues()
   {
+
     $employeesCollection = Employee::with(['user'])
       ->withSum('attendances as total_all_regular_hours', 'regular_hours')
       ->withSum('attendances as total_all_overtime_hours', 'overtime_hours')
       ->withSum('payments as total_paid_to_date', 'amount_paid')
       ->get();
+
 
     $details = $employeesCollection->map(function ($employee) {
       $regHours = (double) ($employee->total_all_regular_hours ?? 0);
@@ -53,7 +55,7 @@ class EmployeeService
       ];
     });
 
-    $debtors = $details->filter(fn($e) => $e['remaining_due'] > 0)->values();
+    $debtors = $details->filter(fn($e) => $e['remaining_due'] >= 0)->values();
 
     return [
       'employees' => $debtors,
