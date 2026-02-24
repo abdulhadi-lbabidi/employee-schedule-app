@@ -44,9 +44,9 @@ class PaymentService
 
       return [
         'week_range' => $range,
-        'total_regular_hours' => $weekRecords->sum('regular_hours'),
-        'total_overtime_hours' => $weekRecords->sum('overtime_hours'),
-        'estimated_amount' => $remainingAmount,
+        'total_regular_hours' => round($weekRecords->sum('regular_hours'), 2),
+        'total_overtime_hours' => round($weekRecords->sum('overtime_hours'), 2),
+        'estimated_amount' => round($remainingAmount, 2),
         'days_count' => $weekRecords->count(),
         'ids' => $weekRecords->pluck('id'),
       ];

@@ -8,28 +8,35 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
+  use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        $this->call([
-            AdminSeeder::class,]);
-        $this->call([
-            WorkshopSeeder::class,]);
-        $this->call([
-            EmployeeSeeder::class,]);
-        $this->call([
-            AttendanceSeeder::class,]);
-        $this->call([
-            LoanSeeder::class,]);
-        $this->call([
-            RewardSeeder::class,]);
-        $this->call([
-            PaymentSeeder::class,]);
+  /**
+   * Seed the application's database.
+   */
+  public function run(): void
+  {
+    $this->call([
+      AdminSeeder::class,
+    ]);
+    $this->call([
+      WorkshopSeeder::class,
+    ]);
+    $this->call([
+      EmployeeSeeder::class,
+    ]);
+    $this->call([
+      AttendanceSeeder::class,
+    ]);
+    $this->call([
+      LoanSeeder::class,
+    ]);
+    $this->call([
+      RewardSeeder::class,
+    ]);
+    $this->call([
+      PaymentSeeder::class,
+    ]);
 
 
-    }
+  }
 }

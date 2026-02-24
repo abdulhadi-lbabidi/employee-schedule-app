@@ -12,21 +12,21 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class LoanFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
-    {
-        $number = fake()->randomFloat(2, 100, 1000);
-        return [
-            'employee_id' => Employee::all()->random()->id,
-            'admin_id' => Admin::all()->random()->id,
-            'amount' => $number,
-            'paid_amount' => fake()->randomElement([$number / 2, $number / 3, $number / 4, $number]),
-            'status' => fake()->randomElement(['waiting', 'approved', 'rejected', 'completed', 'partially']),
-            'date' => Carbon::createFromDate(2026, 1),
-        ];
-    }
+  /**
+   * Define the model's default state.
+   *
+   * @return array<string, mixed>
+   */
+  public function definition(): array
+  {
+    $number = fake()->randomFloat(2, 100, 1000);
+    return [
+      'employee_id' => Employee::all()->random()->id,
+      'admin_id' => Admin::all()->random()->id,
+      'amount' => $number,
+      'paid_amount' => fake()->randomElement([$number / 2, $number / 3, $number / 4, $number]),
+      'status' => fake()->randomElement(['waiting', 'approved', 'rejected', 'completed', 'partially']),
+      'date' => Carbon::createFromDate(2026, 1),
+    ];
+  }
 }

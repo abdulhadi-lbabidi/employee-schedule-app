@@ -8,11 +8,11 @@ use Illuminate\Database\Seeder;
 
 class RewardSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        Reward::factory()->count(30)->create();
-    }
+  /**
+   * Run the database seeds.
+   */
+  public function run(): void
+  {
+    Reward::factory()->count(30)->create();
+  }
 }

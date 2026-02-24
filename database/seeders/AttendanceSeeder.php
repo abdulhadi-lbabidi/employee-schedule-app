@@ -9,11 +9,11 @@ use Illuminate\Database\Seeder;
 
 class AttendanceSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        Attendance::factory()->count(5)->create();
-    }
+  /**
+   * Run the database seeds.
+   */
+  public function run(): void
+  {
+    Attendance::factory()->count(5)->create();
+  }
 }

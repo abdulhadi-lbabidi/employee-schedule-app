@@ -8,11 +8,11 @@ use Illuminate\Database\Seeder;
 
 class PaymentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        Payment::factory()->count(30)->create();
-    }
+  /**
+   * Run the database seeds.
+   */
+  public function run(): void
+  {
+    Payment::factory()->count(30)->create();
+  }
 }

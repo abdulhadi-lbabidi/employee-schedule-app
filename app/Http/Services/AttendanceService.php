@@ -64,7 +64,6 @@ class AttendanceService
       $date = Carbon::parse($item->date);
       $startOfWeek = $date->copy()->startOfWeek(Carbon::SATURDAY);
       $endOfWeek = $date->copy()->endOfWeek(Carbon::FRIDAY);
-
       return $startOfWeek->format('Y-m-d') . ' إلى ' . $endOfWeek->format('Y-m-d');
     })->map(function ($weekRecords, $weekRange) use ($employee) {
 
@@ -72,8 +71,9 @@ class AttendanceService
         ->map(function ($workshopGroup) use ($employee) {
           $workshop = $workshopGroup->first()->workshop;
 
-          $totalReg = (float) $workshopGroup->sum('regular_hours');
-          $totalOvt = (float) $workshopGroup->sum('overtime_hours');
+          // إضافة round هنا للساعات
+          $totalReg = round((float) $workshopGroup->sum('regular_hours'), 2);
+          $totalOvt = round((float) $workshopGroup->sum('overtime_hours'), 2);
 
           $regPay = round($totalReg * $employee->hourly_rate, 2);
           $ovtPay = round($totalOvt * $employee->overtime_rate, 2);
@@ -96,8 +96,9 @@ class AttendanceService
         'week_range' => $weekRange,
         'workshops' => $workshopsSummary,
         'weekly_totals' => [
-          'total_regular_hours' => $workshopsSummary->sum('total_regular_hours'),
-          'total_overtime_hours' => $workshopsSummary->sum('total_overtime_hours'),
+          // إضافة round هنا للمجاميع الأسبوعية
+          'total_regular_hours' => round($workshopsSummary->sum('total_regular_hours'), 2),
+          'total_overtime_hours' => round($workshopsSummary->sum('total_overtime_hours'), 2),
           'total_regular_pay' => round($workshopsSummary->sum('regular_pay'), 2),
           'total_overtime_pay' => round($workshopsSummary->sum('overtime_pay'), 2),
           'grand_total_pay' => round($workshopsSummary->sum('total_pay'), 2),

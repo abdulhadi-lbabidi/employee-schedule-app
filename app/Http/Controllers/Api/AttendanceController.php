@@ -47,8 +47,8 @@ class AttendanceController extends Controller
     $weeks = $this->attendanceService->getEmployeeWeeklyHoursAndPay($employee->id);
 
     $grandTotals = [
-      'total_regular_hours' => $weeks->sum(fn($w) => $w['weekly_totals']['total_regular_hours']),
-      'total_overtime_hours' => $weeks->sum(fn($w) => $w['weekly_totals']['total_overtime_hours']),
+      'total_regular_hours' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_regular_hours']), 2),
+      'total_overtime_hours' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_overtime_hours']), 2),
       'total_regular_pay' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_regular_pay']), 2),
       'total_overtime_pay' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_overtime_pay']), 2),
       'grand_total_pay' => round($weeks->sum(fn($w) => $w['weekly_totals']['grand_total_pay']), 2),
