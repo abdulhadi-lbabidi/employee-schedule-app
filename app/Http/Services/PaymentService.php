@@ -122,27 +122,55 @@ class PaymentService
 
   public function update(Payment $payment, array $data)
   {
-    $finalTotal = $payment->total_amount;
+    return DB::transaction(function () use ($payment, $data) {
+      $finalTotal = $payment->total_amount;
 
-    if (isset($data['amount_paid'])) {
-      $newAmountPaid = $payment->amount_paid + $data['amount_paid'];
+      if (isset($data['amount_paid'])) {
+        $additionalAmount = $data['amount_paid'];
+        $newTotalPaid = $payment->amount_paid + $additionalAmount;
 
-      if ($newAmountPaid > $finalTotal) {
-        throw new \Exception("Error: The total paid amount ({$newAmountPaid}) cannot exceed the required total ({$finalTotal}).");
+        if ($newTotalPaid > $finalTotal) {
+          throw new \Exception("Error: The total paid amount cannot exceed the required total.");
+        }
+
+        $payment->amount_paid = $newTotalPaid;
+        $payment->is_paid = $payment->amount_paid >= $finalTotal;
+
+        if (isset($data['payment_date'])) {
+          $payment->payment_date = $data['payment_date'];
+        }
+        $payment->save();
+
+        $attendances = Attendance::where('employee_id', $payment->employee_id)
+          ->whereRaw('paid_amount < estimated_amount')
+          ->orderBy('date', 'asc')
+          ->get();
+
+        $amountToDistribute = $additionalAmount;
+
+        foreach ($attendances as $attendance) {
+          if ($amountToDistribute <= 0)
+            break;
+
+          $remainingOnRecord = $attendance->estimated_amount - $attendance->paid_amount;
+
+          if ($amountToDistribute >= $remainingOnRecord) {
+            $amountToDistribute -= $remainingOnRecord;
+            $attendance->paid_amount = $attendance->estimated_amount;
+          } else {
+            $attendance->paid_amount += $amountToDistribute;
+            $amountToDistribute = 0;
+          }
+          $attendance->save();
+        }
+      } else {
+        $payment->update($data);
       }
 
-      $data['amount_paid'] = $newAmountPaid;
-    }
-
-    $payment->fill($data);
-
-    if (isset($data['amount_paid'])) {
-      $payment->is_paid = $payment->amount_paid >= $finalTotal;
-    }
-
-    $payment->save();
-    return $payment;
+      return $payment;
+    });
   }
+
 
 
   public function updateValue(Payment $payment, array $data)
