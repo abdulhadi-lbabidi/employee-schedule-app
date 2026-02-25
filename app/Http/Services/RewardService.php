@@ -45,4 +45,11 @@ class RewardService
   {
     return $reward->restore();
   }
+
+  public function getByEmployeeId($employeeId)
+  {
+    return Reward::with('admin')
+      ->where('employee_id', $employeeId)
+      ->get();
+  }
 }

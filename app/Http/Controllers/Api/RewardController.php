@@ -68,4 +68,15 @@ class RewardController extends Controller
 
     return response()->json(['message' => 'Reward permanently deleted']);
   }
+
+  public function getEmployeeRewards($employee_id)
+  {
+    $rewards = $this->rewardService->getByEmployeeId($employee_id);
+
+    if ($rewards->isEmpty()) {
+      return response()->json(['message' => 'No rewards found for this employee'], 404);
+    }
+
+    return RewardResource::collection($rewards);
+  }
 }

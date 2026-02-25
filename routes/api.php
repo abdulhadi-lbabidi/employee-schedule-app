@@ -111,7 +111,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete']);
 
     // reward
-    // Route::apiResource('rewards', RewardController::class);
     Route::get('rewards', [RewardController::class, 'index']);
     Route::post('rewards', [RewardController::class, 'store']);
     Route::put('rewards/{reward}', [RewardController::class, 'update']);
@@ -132,10 +131,8 @@ Route::middleware('auth:sanctum')->group(function () {
   |----------------------------------------------------------------------
   */
   Route::middleware('role:employee')->group(function () {
+    Route::get('rewards/employee/{employee_id}', [RewardController::class, 'getEmployeeRewards']);
     Route::prefix('attendances')->group(function () {
-
-
-
       // offline
       Route::post('sync', [AttendanceController::class, 'sync']);
     });
