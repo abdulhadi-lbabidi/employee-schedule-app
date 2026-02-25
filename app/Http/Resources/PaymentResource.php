@@ -14,16 +14,19 @@ class PaymentResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+    $total = (float) $this->total_amount;
+    $paid = (float) $this->amount_paid;
+    $remaining = round($total - $paid, 2);
+
     return [
       'id' => $this->id,
       'employee_name' => $this->employee?->user?->full_name,
       'admin_name' => $this->admin?->name,
-      'total_amount' => $this->total_amount,
-      'amount_paid' => $this->amount_paid,
-      'remaining_amount' => round($this->total_amount - $this->amount_paid, 2),
-
-      'status' => $this->is_paid ? 'Paid' : 'Pending',
-      'payment_date' => $this->payment_date?->format('Y-m-d H:i'),
+      'total_amount' => $total,
+      'amount_paid' => $paid,
+      'remaining_amount' => $remaining,
+      'status' => ($remaining <= 0) ? 'Paid' : 'Pending',
+      'payment_date' => $this->payment_date ? \Carbon\Carbon::parse($this->payment_date)->format('Y-m-d H:i') : null,
     ];
   }
 }

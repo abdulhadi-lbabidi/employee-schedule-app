@@ -19,11 +19,14 @@ class PaymentService
       ->get();
   }
 
+
+
   public function getArchived()
   {
     return Payment::onlyTrashed()
       ->get();
   }
+
 
   public function getUnpaidWeeks(Employee $employee)
   {
@@ -38,6 +41,9 @@ class PaymentService
       $end = $date->endOfWeek(Carbon::FRIDAY)->format('Y-m-d');
       return $start . " إلى " . $end;
     })->map(function ($weekRecords, $range) {
+
+      $totalAlreadyPaid = $weekRecords->sum('paid_amount');
+
       $remainingAmount = $weekRecords->sum(function ($record) {
         return $record->estimated_amount - $record->paid_amount;
       });
@@ -49,6 +55,7 @@ class PaymentService
         'estimated_amount' => round($remainingAmount, 2),
         'days_count' => $weekRecords->count(),
         'ids' => $weekRecords->pluck('id'),
+        'payment_status' => $totalAlreadyPaid > 0 ? 'partially_paid' : 'unpaid',
       ];
     })->values();
   }

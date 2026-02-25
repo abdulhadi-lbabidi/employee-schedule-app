@@ -78,30 +78,38 @@ class AttendanceController extends Controller
     $workshopsData = $this->attendanceService->getEmployeeWorkshopsDetailedSummary($employee->id);
 
     $workshopsSummary = $workshopsData->map(function ($ws) use ($employee) {
-      $regPay = round($ws->total_regular_hours * $employee->hourly_rate, 2);
-      $ovPay = round($ws->total_overtime_hours * $employee->overtime_rate, 2);
+      // تقريب الساعات أولاً لحل مشكلة فواصل الـ Floating Point
+      $regHours = round((float) $ws->total_regular_hours, 2);
+      $ovHours = round((float) $ws->total_overtime_hours, 2);
+
+      $regPay = round($regHours * $employee->hourly_rate, 2);
+      $ovPay = round($ovHours * $employee->overtime_rate, 2);
 
       return [
         'workshop_id' => $ws->id,
         'workshop_name' => $ws->name,
         'location' => $ws->location,
-        'regular_hours' => (float) $ws->total_regular_hours,
-        'overtime_hours' => (float) $ws->total_overtime_hours,
+        'regular_hours' => $regHours,
+        'overtime_hours' => $ovHours,
         'regular_pay' => $regPay,
         'overtime_pay' => $ovPay,
         'total_pay' => round($regPay + $ovPay, 2),
       ];
     });
 
-    $grandRegularPay = round($globalHours['total_regular_hours'] * $employee->hourly_rate, 2);
-    $grandOvertimePay = round($globalHours['total_overtime_hours'] * $employee->overtime_rate, 2);
+    // تقريب إجمالي الساعات العام
+    $totalRegHours = round($globalHours['total_regular_hours'], 2);
+    $totalOvHours = round($globalHours['total_overtime_hours'], 2);
+
+    $grandRegularPay = round($totalRegHours * $employee->hourly_rate, 2);
+    $grandOvertimePay = round($totalOvHours * $employee->overtime_rate, 2);
 
     return response()->json([
       'employee' => new EmployeeResource($employee),
       'workshops_summary' => $workshopsSummary,
       'grand_totals' => [
-        'total_regular_hours' => $globalHours['total_regular_hours'],
-        'total_overtime_hours' => $globalHours['total_overtime_hours'],
+        'total_regular_hours' => $totalRegHours,
+        'total_overtime_hours' => $totalOvHours,
         'total_regular_pay' => $grandRegularPay,
         'total_overtime_pay' => $grandOvertimePay,
         'grand_total_pay' => round($grandRegularPay + $grandOvertimePay, 2),

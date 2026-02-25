@@ -76,6 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('employees/dues-report', [EmployeeController::class, 'duesReport']);
     Route::apiResource('employees', EmployeeController::class);
     Route::get('employees-archived', [EmployeeController::class, 'archived']);
+    
     Route::post('employees/{id}/restore', [EmployeeController::class, 'restore']);
     Route::delete('employees/{id}/force-delete', [EmployeeController::class, 'forceDelete']);
 
