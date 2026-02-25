@@ -81,7 +81,6 @@ class LoanService
 
   public function pay(Loan $loan, $amount)
   {
-
     if ($loan->status === 'waiting') {
       throw new \Exception("Cannot pay a waiting loan.");
     }
@@ -92,6 +91,12 @@ class LoanService
       throw new \Exception("Cannot pay a completed loan.");
     }
 
+
+    $remainingToPay = $loan->amount - $loan->paid_amount;
+
+    if ($amount > $remainingToPay) {
+      throw new \Exception("The paid amount ($amount) exceeds the remaining loan balance ($remainingToPay).");
+    }
 
     $loan->paid_amount += $amount;
 
