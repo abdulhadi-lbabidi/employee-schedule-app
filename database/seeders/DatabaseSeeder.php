@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
       EmployeeSeeder::class,
       AttendanceSeeder::class,
         // PaymentSeeder::class,
-      LoanSeeder::class,
+        // LoanSeeder::class,
       RewardSeeder::class,
       PaymentSeeder::class,
 

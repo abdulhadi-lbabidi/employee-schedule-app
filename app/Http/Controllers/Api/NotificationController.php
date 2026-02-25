@@ -128,7 +128,7 @@ class NotificationController extends Controller
     return $this->executePush(
       $target['tokens'],
       'تم تسجيل الحضور',
-      "تم تسجيل دخولك بنجاح إلى الورشة: {$workshop->name}",
+      "أهلاً {$user->full_name}، تم تسجيل دخولك بنجاح إلى الورشة: {$workshop->name}",
       ['route' => '/', 'workshopId' => $request->workshop_id],
       $target['ids']
     );
@@ -149,7 +149,7 @@ class NotificationController extends Controller
     return $this->executePush(
       $target['tokens'],
       'تم تسجيل الخروج',
-      "تم تسجيل خروجك بنجاح إلى الورشة: {$workshop->name}",
+      "وداعاً {$user->full_name}، تم تسجيل خروجك بنجاح من الورشة: {$workshop->name}",
       ['route' => '/', 'workshopId' => $request->workshop_id],
       $target['ids']
     );

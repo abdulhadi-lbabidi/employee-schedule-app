@@ -81,12 +81,17 @@ class LoanService
 
   public function pay(Loan $loan, $amount)
   {
+
+    if ($loan->status === 'waiting') {
+      throw new \Exception("Cannot pay a waiting loan.");
+    }
     if ($loan->status === 'rejected') {
       throw new \Exception("Cannot pay a rejected loan.");
     }
     if ($loan->status === 'completed') {
       throw new \Exception("Cannot pay a completed loan.");
     }
+
 
     $loan->paid_amount += $amount;
 
