@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Discount extends Model
 {
-  protected $fillable = ['employee_id', 'workshop_id', 'admin_id', 'amount', 'reason'];
+  protected $fillable = ['employee_id', 'workshop_id', 'admin_id', 'amount', 'reason', 'date_issued'];
 
   public function employee()
   {
