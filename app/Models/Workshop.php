@@ -41,4 +41,9 @@ class Workshop extends Model
     return $this->hasMany(Attendance::class);
   }
 
+  public function discounts()
+  {
+    return $this->hasMany(Discount::class);
+  }
+
 }

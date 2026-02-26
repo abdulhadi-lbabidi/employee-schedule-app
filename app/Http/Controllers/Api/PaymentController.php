@@ -42,7 +42,6 @@ class PaymentController extends Controller
   }
 
 
-
   public function show(Payment $payment)
   {
     return new PaymentResource($payment->load('employee'));

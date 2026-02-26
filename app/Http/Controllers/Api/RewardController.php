@@ -33,11 +33,6 @@ class RewardController extends Controller
     return new RewardResource($reward);
   }
 
-  public function show(Reward $reward)
-  {
-    return new RewardResource($reward->load('employee'));
-  }
-
 
   public function update(UpdateRewardRequest $request, Reward $reward)
   {

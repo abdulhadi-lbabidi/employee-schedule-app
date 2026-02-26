@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\DiscountController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LoanController;
 use App\Http\Controllers\Api\NotificationController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\RewardController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkshopController;
+use App\Models\Discount;
 use Illuminate\Support\Facades\Route;
 
 
@@ -46,7 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('loans/{loan}', [LoanController::class, 'show']);
   Route::post('loans', [LoanController::class, 'store']);
 
-  Route::get('rewards/{reward}', [RewardController::class, 'show']);
+  Route::get('rewards/employee/{reward}', [RewardController::class, 'getEmployeeRewards']);
+  Route::get('discounts/employee/{discount}', [DiscountController::class, 'getEmployeeDiscounts']);
 
   Route::get('notifications', [NotificationController::class, 'getUnreadNotifications']);
   Route::post('notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
@@ -118,6 +121,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('rewards-archived', [RewardController::class, 'archived']);
     Route::post('rewards/{id}/restore', [RewardController::class, 'restore']);
     Route::delete('rewards/{id}/force-delete', [RewardController::class, 'forceDelete']);
+
+
+    // discount
+    Route::get('discounts', [DiscountController::class, 'index']);
+    Route::post('discounts', [DiscountController::class, 'store']);
+    Route::put('discounts/{reward}', [DiscountController::class, 'update']);
+    Route::delete('discounts/{reward}', [DiscountController::class, 'destroy']);
 
     Route::post('notifications/send', [NotificationController::class, 'send']);
 
