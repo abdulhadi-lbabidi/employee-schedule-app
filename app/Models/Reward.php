@@ -16,7 +16,8 @@ class Reward extends Model
     'admin_id',
     'amount',
     'reason',
-    'date_issued'
+    'date_issued',
+    'is_used'
   ];
   public function employee()
   {

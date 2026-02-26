@@ -4,6 +4,7 @@
 namespace App\Http\Services;
 
 use App\Models\Attendance;
+use App\Models\Discount;
 use App\Models\Employee;
 use App\Models\Payment;
 use Carbon\Carbon;
@@ -35,7 +36,13 @@ class PaymentService
       ->orderBy('date', 'asc')
       ->get();
 
-    return $records->groupBy(function ($item) {
+    $totalUnusedDiscounts = Discount::where('employee_id', $employee->id)
+      ->where('is_used', false)
+      ->sum('amount');
+
+
+
+    $weeks = $records->groupBy(function ($item) {
       $date = Carbon::parse($item->date);
       $start = $date->startOfWeek(Carbon::SATURDAY)->format('Y-m-d');
       $end = $date->endOfWeek(Carbon::FRIDAY)->format('Y-m-d');
@@ -43,7 +50,6 @@ class PaymentService
     })->map(function ($weekRecords, $range) {
 
       $totalAlreadyPaid = $weekRecords->sum('paid_amount');
-
       $remainingAmount = $weekRecords->sum(function ($record) {
         return $record->estimated_amount - $record->paid_amount;
       });
@@ -58,6 +64,17 @@ class PaymentService
         'payment_status' => $totalAlreadyPaid > 0 ? 'partially_paid' : 'unpaid',
       ];
     })->values();
+
+    $grandTotalRemaining = $weeks->sum('estimated_amount');
+
+    return [
+      'weeks' => $weeks,
+      'summary' => [
+        'gross_total' => round($grandTotalRemaining, 2),
+        'discounts' => round($totalUnusedDiscounts, 2),
+        'net_total' => round($grandTotalRemaining - $totalUnusedDiscounts, 2),
+      ]
+    ];
   }
 
 
@@ -76,13 +93,20 @@ class PaymentService
       }
 
 
-      $actualTotalRequired = $attendances->sum(function ($item) {
+      $totalDiscounts = Discount::where('employee_id', $request->employee_id)
+        ->where('is_used', false)
+        ->sum('amount');
+
+      $grossAmountRequired = $attendances->sum(function ($item) {
         return $item->estimated_amount - $item->paid_amount;
       });
 
-      if (round($request->amount_paid, 2) > round($actualTotalRequired, 2)) {
+      $netTotalRequired = $grossAmountRequired - $totalDiscounts;
+
+
+      if (round($request->amount_paid, 2) > round($netTotalRequired, 2)) {
         return response()->json([
-          'message' => "The paid amount ({$request->amount_paid}) exceeds the total required amount ({$actualTotalRequired}) for the selected records."
+          'message' => "The paid amount ({$request->amount_paid}) exceeds the total required amount ({$netTotalRequired}) for the selected records."
         ], 422);
       }
 
@@ -90,13 +114,13 @@ class PaymentService
       $payment = Payment::create([
         'employee_id' => $request->employee_id,
         'admin_id' => auth()->id(),
-        'total_amount' => $actualTotalRequired,
+        'total_amount' => $grossAmountRequired,
         'amount_paid' => $request->amount_paid,
         'payment_date' => $request->payment_date,
-        'is_paid' => round($request->amount_paid, 2) >= round($actualTotalRequired, 2),
+        'is_paid' => round($request->amount_paid, 2) >= round($grossAmountRequired, 2),
       ]);
 
-      $amountToDistribute = $request->amount_paid;
+      $amountToDistribute = $request->amount_paid + $totalDiscounts;
 
       foreach ($attendances as $attendance) {
         if ($amountToDistribute <= 0)
@@ -113,6 +137,10 @@ class PaymentService
         }
         $attendance->save();
       }
+
+      Discount::where('employee_id', $request->employee_id)
+        ->where('is_used', false)
+        ->update(['is_used' => true]);
 
       return response()->json(['message' => 'Payment paid successfully'], 200);
     });

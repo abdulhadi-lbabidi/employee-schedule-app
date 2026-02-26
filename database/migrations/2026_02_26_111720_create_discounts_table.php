@@ -21,7 +21,7 @@ return new class extends Migration {
       $table->decimal('amount', 8, 2);
       $table->text('reason');
       $table->date('date_issued');
-
+      $table->boolean(column: 'is_used')->default(false);
       $table->timestamps();
     });
   }
