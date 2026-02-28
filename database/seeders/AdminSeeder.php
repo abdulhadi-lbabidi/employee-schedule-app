@@ -13,9 +13,9 @@ class AdminSeeder extends Seeder
   public function run(): void
   {
     Admin::factory()->create([
-      'name' => 'Abdulrahman Nouh',
+      'name' => 'عبدالرحمن نوح',
     ])->user()->create([
-          'full_name' => 'Abdulrahman Nouh',
+          'full_name' => 'عبدالرحمن نوح',
           'phone_number' => '0946963546',
           'profile_image_url' => null,
           'email' => 'abdulrahmannouh@nouh-agency.com',

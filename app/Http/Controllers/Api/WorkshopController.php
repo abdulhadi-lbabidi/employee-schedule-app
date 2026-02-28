@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Workshop\CreateWorkshopRequest;
 use App\Http\Requests\Workshop\UpdateWorkshopRequest;
 use App\Http\Resources\WorkshopResource;
 use App\Http\Services\WorkshopService;
+use App\Http\Controllers\Controller;
 use App\Models\Workshop;
 
 class WorkshopController extends Controller

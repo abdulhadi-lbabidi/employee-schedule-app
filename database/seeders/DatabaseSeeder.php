@@ -19,9 +19,6 @@ class DatabaseSeeder extends Seeder
       WorkshopSeeder::class,
       EmployeeSeeder::class,
       AttendanceSeeder::class,
-        // PaymentSeeder::class,
-        // LoanSeeder::class,
-      RewardSeeder::class,
       PaymentSeeder::class,
 
     ]);

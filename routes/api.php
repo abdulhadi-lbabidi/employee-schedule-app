@@ -1,18 +1,16 @@
 <?php
 
-use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DiscountController;
 use App\Http\Controllers\Api\EmployeeController;
-use App\Http\Controllers\Api\LoanController;
-use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\WorkshopController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\RewardController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\WorkshopController;
-use App\Models\Discount;
+use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\LoanController;
 use Illuminate\Support\Facades\Route;
 
 

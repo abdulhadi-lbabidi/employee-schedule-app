@@ -14,42 +14,42 @@ class EmployeeSeeder extends Seeder
   public function run(): void
   {
     Employee::factory()->create([
-      'position' => 'daily worker',
-      'department' => 'Executer & Watcher',
+      'position' => 'عامل يومية',
+      'department' => 'مراقب ورشة',
       'hourly_rate' => 10,
       'overtime_rate' => 1,
       'is_online' => 0,
-      'current_location' => 'Office',
+      'current_location' => 'المكتب',
     ])->user()->create([
-          'full_name' => 'Ahmad Aini',
+          'full_name' => 'أحمد عيني',
           'phone_number' => '0993227885',
           'profile_image_url' => null,
           'email' => 'ahmadaini@nouh-agency.com',
           'password' => bcrypt('12345678'),
         ]);
     Employee::factory()->create([
-      'position' => 'daily worker',
-      'department' => 'Executer & Watcher',
+      'position' => 'عامل يومية',
+      'department' => 'مراقب ورشة',
       'hourly_rate' => 7,
       'overtime_rate' => 1,
       'is_online' => 0,
       'current_location' => 'W115',
     ])->user()->create([
-          'full_name' => 'Ahmad Mousa',
+          'full_name' => 'أحمد موسى',
           'phone_number' => '0954282944',
           'profile_image_url' => null,
           'email' => 'ahmad@nouh-agency.com',
           'password' => bcrypt('12345678'),
         ]);
     Employee::factory()->create([
-      'position' => 'daily worker',
-      'department' => 'Executer & Watcher',
+      'position' => 'عامل يومية',
+      'department' => 'مراقب ورشة',
       'hourly_rate' => 7,
       'overtime_rate' => 1,
       'is_online' => false,
       'current_location' => 'W118',
     ])->user()->create([
-          'full_name' => 'Abdulkarim Ibrahim',
+          'full_name' => 'عبدالكريم ابراهيم',
           'phone_number' => '0981287087',
           'profile_image_url' => null,
           'email' => "abdulkarim@nouh-agency.com",

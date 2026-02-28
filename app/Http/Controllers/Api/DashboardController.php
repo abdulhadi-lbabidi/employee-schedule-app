@@ -13,7 +13,6 @@ class DashboardController extends Controller
   ) {
   }
 
-
   public function index()
   {
     $stats = $this->dashboardService->statistics();

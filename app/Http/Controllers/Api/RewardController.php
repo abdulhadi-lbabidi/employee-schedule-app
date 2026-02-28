@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Reward\CreateRewardRequest;
 use App\Http\Requests\Reward\UpdateRewardRequest;
 use App\Http\Resources\RewardResource;
+use App\Http\Controllers\Controller;
 use App\Http\Services\RewardService;
 use App\Models\Reward;
 
