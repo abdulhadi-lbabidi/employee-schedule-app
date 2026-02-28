@@ -2,10 +2,17 @@
 
 namespace App\Http\Services;
 
+use App\Models\Employee;
 use App\Models\Loan;
+use App\Models\User;
 
 class LoanService
 {
+
+  public function __construct(private NotificationService $notificationService)
+  {
+  }
+
   public function getAll()
   {
     $user = auth()->user();
@@ -27,14 +34,35 @@ class LoanService
 
   public function create(array $data)
   {
-
-    return Loan::create([
+    $loan = Loan::create([
       'employee_id' => auth()->user()->userable_id,
       'amount' => $data['amount'],
       'paid_amount' => 0,
       'status' => 'waiting',
       'date' => $data['date'],
     ]);
+
+    $employee = Employee::find($loan->employee_id);
+
+    $user = User::where('userable_id', $employee->id)
+      ->where('userable_type', Employee::class)
+      ->first();
+
+    if ($user) {
+      $this->notificationService->sendToUser(
+        $user,
+        'طلب سلفة جديد 💳',
+        "تم إنشاء طلب سلفة بقيمة {$loan->amount}",
+        [
+          'type' => 'loan_created',
+          'loan_id' => (string) $loan->id,
+          'status' => $loan->status,
+          'route' => '/loans'
+        ]
+      );
+    }
+
+    return $loan;
   }
 
   public function update(Loan $loan, array $data)

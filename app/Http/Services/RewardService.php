@@ -2,10 +2,17 @@
 
 
 namespace App\Http\Services;
+
 use App\Models\Reward;
+use App\Models\User;
 
 class RewardService
 {
+
+  public function __construct(private NotificationService $notificationService)
+  {
+  }
+
   public function getAll()
   {
     return Reward::with('employee', 'admin')
@@ -22,7 +29,23 @@ class RewardService
 
   public function create(array $data)
   {
-    return Reward::create($data);
+    $reward = Reward::create($data);
+    $user = User::find($data['user_id']);
+
+    if ($user) {
+      $this->notificationService->sendToUser(
+        $user,
+        'مكافأة جديدة 🎁',
+        "تهانينا {$user->full_name}، تم صرف مكافأة جديدة لك بقيمة {$reward->amount}",
+        [
+          'type' => 'reward_received',
+          'reward_id' => (string) $reward->id,
+          'route' => '/rewards'
+        ]
+      );
+    }
+
+    return $reward;
   }
 
   public function update(Reward $reward, array $data)

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Services\FcmService;
 use Illuminate\Http\Request;
-use App\Models\Employee;
 use App\Models\Notification;
+use App\Models\Employee;
 use App\Models\Workshop;
 use App\Models\User;
 
@@ -74,7 +74,6 @@ class NotificationController extends Controller
       $user = User::find($request->user_id);
       if ($user && $user->fcm_token) {
         $tokens = [$user->fcm_token];
-
         $userIds = [$user->id];
       }
     } elseif ($request->filled('workshop_id')) {
