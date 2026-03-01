@@ -30,8 +30,9 @@ class RewardService
   public function create(array $data)
   {
     $reward = Reward::create($data);
-    $user = User::find($data['user_id']);
-
+    $user = User::where('userable_id', $data['employee_id'])
+      ->where('userable_type', 'Employee')
+      ->first();
     if ($user) {
       $this->notificationService->sendToUser(
         $user,

@@ -25,10 +25,8 @@ class DiscountService
   {
     $discount = Discount::create($data);
 
-    $employee = Employee::find($data['employee_id']);
-
-    $user = User::where('userable_id', $employee->id)
-      ->where('userable_type', Employee::class)
+    $user = User::where('userable_id', $data['employee_id'])
+      ->where('userable_type', 'Employee')
       ->first();
 
     if ($user) {

@@ -42,23 +42,15 @@ class LoanService
       'date' => $data['date'],
     ]);
 
-    $employee = Employee::find($loan->employee_id);
+    $admins = User::where('userable_type', 'Admin')->get();
+    $employeeName = auth()->user()->full_name;
 
-    $user = User::where('userable_id', $employee->id)
-      ->where('userable_type', Employee::class)
-      ->first();
-
-    if ($user) {
+    foreach ($admins as $admin) {
       $this->notificationService->sendToUser(
-        $user,
+        $admin,
         'طلب سلفة جديد 💳',
-        "تم إنشاء طلب سلفة بقيمة {$loan->amount}",
-        [
-          'type' => 'loan_created',
-          'loan_id' => (string) $loan->id,
-          'status' => $loan->status,
-          'route' => '/loans'
-        ]
+        "قام الموظف {$employeeName} بطلب سلفة بقيمة {$loan->amount}",
+        ['type' => 'loan_request', 'loan_id' => (string) $loan->id, 'route' => '/admin/loans']
       );
     }
 
@@ -96,6 +88,7 @@ class LoanService
       'status' => 'approved',
       'admin_id' => auth()->user()->userable_id,
     ]);
+    $this->notifyEmployee($loan, 'تمت الموافقة على السلفة ✅', "تمت الموافقة على طلب السلفة الخاص بك بقيمة {$loan->amount}");
   }
 
   public function reject(Loan $loan)
@@ -103,7 +96,7 @@ class LoanService
     if ($loan->status === 'completed') {
       throw new \Exception("Cannot reject a completed loan.");
     }
-
+    $this->notifyEmployee($loan, 'تم رفض طلب السلفة ❌', "نعتذر، تم رفض طلب السلفة الخاص بك بقيمة {$loan->amount}");
     return $loan->forceDelete();
   }
 
@@ -135,6 +128,26 @@ class LoanService
     }
 
     $loan->save();
+
+    $message = "تم تسجيل دفع مبلغ {$amount}. المتبقي عليك: " . ($loan->amount - $loan->paid_amount);
+    $this->notifyEmployee($loan, 'تحديث دفع السلفة 💰', $message);
   }
 
+
+  private function notifyEmployee(Loan $loan, string $title, string $body)
+  {
+    $user = User::where('userable_id', $loan->employee_id)
+      ->where('userable_type', 'Employee')
+      ->first();
+
+    if ($user) {
+      $this->notificationService->sendToUser($user, $title, $body, [
+        'type' => 'loan_update',
+        'loan_id' => (string) $loan->id,
+        'status' => $loan->status,
+        'route' => '/loans'
+      ]);
+    }
+
+  }
 }
