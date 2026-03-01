@@ -46,12 +46,28 @@ class AttendanceController extends Controller
 
     $weeks = $this->attendanceService->getEmployeeWeeklyHoursAndPay($employee->id);
 
+
+    $allWorkshopsInAllWeeks = $weeks->pluck('workshops')->flatten(1);
+
+    $workshopsGrandSummary = $allWorkshopsInAllWeeks->groupBy('workshop.id')->map(function ($group) {
+      $first = $group->first();
+      return [
+        'workshop' => $first['workshop'],
+        'total_regular_hours' => round($group->sum('total_regular_hours'), 2),
+        'total_overtime_hours' => round($group->sum('total_overtime_hours'), 2),
+        'total_regular_pay' => round($group->sum('regular_pay'), 2),
+        'total_overtime_pay' => round($group->sum('overtime_pay'), 2),
+        'total_pay' => round($group->sum('total_pay'), 2),
+      ];
+    })->values();
+
     $grandTotals = [
-      'total_regular_hours' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_regular_hours']), 2),
-      'total_overtime_hours' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_overtime_hours']), 2),
-      'total_regular_pay' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_regular_pay']), 2),
-      'total_overtime_pay' => round($weeks->sum(fn($w) => $w['weekly_totals']['total_overtime_pay']), 2),
-      'grand_total_pay' => round($weeks->sum(fn($w) => $w['weekly_totals']['grand_total_pay']), 2),
+      'total_regular_hours' => round($workshopsGrandSummary->sum('total_regular_hours'), 2),
+      'total_overtime_hours' => round($workshopsGrandSummary->sum('total_overtime_hours'), 2),
+      'total_regular_pay' => round($workshopsGrandSummary->sum('total_regular_pay'), 2),
+      'total_overtime_pay' => round($workshopsGrandSummary->sum('total_overtime_pay'), 2),
+      'grand_total_pay' => round($workshopsGrandSummary->sum('total_pay'), 2),
+      'workshops_summary' => $workshopsGrandSummary // إضافة القائمة التي طلبتها هنا
     ];
 
     return response()->json([
@@ -63,7 +79,6 @@ class AttendanceController extends Controller
       'grand_totals' => $grandTotals
     ]);
   }
-
 
   // details employee
   public function employeeHoursAndPaySummary(Request $request, Employee $employee)

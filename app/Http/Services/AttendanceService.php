@@ -71,7 +71,6 @@ class AttendanceService
         ->map(function ($workshopGroup) use ($employee) {
           $workshop = $workshopGroup->first()->workshop;
 
-          // إضافة round هنا للساعات
           $totalReg = round((float) $workshopGroup->sum('regular_hours'), 2);
           $totalOvt = round((float) $workshopGroup->sum('overtime_hours'), 2);
 
@@ -96,7 +95,6 @@ class AttendanceService
         'week_range' => $weekRange,
         'workshops' => $workshopsSummary,
         'weekly_totals' => [
-          // إضافة round هنا للمجاميع الأسبوعية
           'total_regular_hours' => round($workshopsSummary->sum('total_regular_hours'), 2),
           'total_overtime_hours' => round($workshopsSummary->sum('total_overtime_hours'), 2),
           'total_regular_pay' => round($workshopsSummary->sum('regular_pay'), 2),
